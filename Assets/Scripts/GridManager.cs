@@ -7,12 +7,12 @@ public class GridManager : MonoBehaviour {
 
     [SerializeField]
     private Tilemap map;
-    private List<Grid> grids = new List<Grid>();
+    private List<CustomGrid> grids = new List<CustomGrid>();
 
-    public List<Grid> Grids => grids;
+    public List<CustomGrid> Grids => grids;
 
     [SerializeField]
-    private Grid gridPrefab;
+    private CustomGrid gridPrefab;
 
     void Start() {
         CreateGrid();
@@ -25,7 +25,7 @@ public class GridManager : MonoBehaviour {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                Grid newGrid = Instantiate(gridPrefab, transform);
+                CustomGrid newGrid = Instantiate(gridPrefab, transform);
                 newGrid.SetIndex(x, y);
                 newGrid.name = "(" + x + ", " + y + ")";
                 grids.Add(newGrid);
