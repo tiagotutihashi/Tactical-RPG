@@ -40,6 +40,11 @@ public class Unit : MonoBehaviour
     {
         job = GetComponent<JobBase>();
     }
+    private void Start()
+    {
+        level = level == 0 ? 1 : level;
+        SetUnitByLevel(level);
+    }
 
     public void SetUnitByLevel(int level)
     {
@@ -65,7 +70,7 @@ public class Unit : MonoBehaviour
     public void EarnExp(bool isKill)
     {
         // Base exp gain values for normal action and kill
-        int expGain = isKill ? 15 : 40;
+        int expGain = isKill ? 40 : 15;
 
         // Reduction of exp gain by level
         expGain = Mathf.FloorToInt(expGain * (101 - level) / 100);
