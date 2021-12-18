@@ -9,7 +9,9 @@ public class CustomGrid : MonoBehaviour {
     [SerializeField]
     private int indexY;
 
-    private GameObject unit;
+    [SerializeField]
+    private Unit unit;
+    public Unit Unit => unit;
 
     public int IndexX => indexX;
     public int IndexY => indexY;
@@ -19,6 +21,10 @@ public class CustomGrid : MonoBehaviour {
         indexX = x;
         indexY = y;
 
+    }
+
+    public void SetUnit(Unit unit) {
+        this.unit = unit;
     }
 
 }
