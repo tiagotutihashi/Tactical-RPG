@@ -72,7 +72,7 @@ public class ShowRangeTiles : MonoBehaviour {
 
     private void onClickMap() {
 
-        GetMoveRange(5);
+        GetMoveRange(6);
 
     }
 
@@ -128,20 +128,16 @@ public class ShowRangeTiles : MonoBehaviour {
                     int newX = gridPosition.x + x;
                     int newY = gridPosition.y + y;
 
-                    CustomGrid verifyUnit = gridManager.VerifyIfContains(new Vector2(newX, newY));
-                    // Verify if contains a unit in the cell
-                    if (verifyUnit == null) {
-                        Vector3Int cellPostion = new Vector3Int(newX, newY, gridPosition.z);
-                        TileBase currentCell = map.GetTile(cellPostion);
+                    Vector3Int cellPostion = new Vector3Int(newX, newY, gridPosition.z);
+                    TileBase currentCell = map.GetTile(cellPostion);
 
-                        if (currentCell != null) {
-                            StoredDataTile storedDataTile = new StoredDataTile();
-                            storedDataTile.position = cellPostion;
-                            storedDataTile.distance = Mathf.Infinity;
-                            storedDataTile.landSpeed = dataFromTiles[currentCell].WalkingSpeed;
-                            storedDataTiles.Add(storedDataTile);
-                        }
-
+                    if (currentCell != null)
+                    {
+                        StoredDataTile storedDataTile = new StoredDataTile();
+                        storedDataTile.position = cellPostion;
+                        storedDataTile.distance = Mathf.Infinity;
+                        storedDataTile.landSpeed = dataFromTiles[currentCell].WalkingSpeed;
+                        storedDataTiles.Add(storedDataTile);
                     }
 
                 }
@@ -158,6 +154,18 @@ public class ShowRangeTiles : MonoBehaviour {
         }
 
         range.RemoveAt(0);
+        List<Vector3Int> toRemoveTiles = new List<Vector3Int>();
+        foreach (var tile in range)
+        {
+            if (gridManager.VerifyIfContains(new Vector2(tile.x, tile.y)) != null)
+            {
+                toRemoveTiles.Add(tile);
+            }
+        }
+        foreach (var tile in toRemoveTiles)
+        {
+            range.Remove(tile);
+        }
 
         TileBase[] rangeTiles = new TileBase[range.Count];
 
@@ -185,27 +193,29 @@ public class ShowRangeTiles : MonoBehaviour {
         startTile.visited = true;
         startTile.remainMovement = amountMove;
 
-        Queue<StoredDataTile> queueTile = new Queue<StoredDataTile>();
+        MinHeap<StoredDataTile> heapTile = new MinHeap<StoredDataTile>(storedDataTiles.Count, x => x.distance);
 
-        queueTile.Enqueue(startTile);
+        heapTile.Add(startTile);
 
-        while (queueTile.Count > 0) {
+        while (heapTile.Count() > 0) {
 
-            StoredDataTile selectedTile = queueTile.Dequeue();
+            StoredDataTile selectedTile = heapTile.RemoveMin();
 
             if (selectedTile.remainMovement > 0) {
                 List<StoredDataTile> neighbor = storedDataTiles.Where(x => Mathf.Abs(selectedTile.position.x - x.position.x) + Mathf.Abs(selectedTile.position.y - x.position.y) == 1).ToList();
 
                 foreach (StoredDataTile storedDataTile in neighbor) {
-                    if (storedDataTile.distance > selectedTile.distance + selectedTile.landSpeed && selectedTile.remainMovement > selectedTile.landSpeed - 1) {
+                    if (storedDataTile.distance > selectedTile.distance + storedDataTile.landSpeed && selectedTile.remainMovement > storedDataTile.landSpeed - 1) {
                         storedDataTile.parent = selectedTile;
                         storedDataTile.visited = true;
-                        storedDataTile.remainMovement = selectedTile.remainMovement - selectedTile.landSpeed;
-                        storedDataTile.distance = selectedTile.distance + selectedTile.landSpeed;
-                        queueTile.Enqueue(storedDataTile);
+                        storedDataTile.remainMovement = selectedTile.remainMovement - storedDataTile.landSpeed;
+                        storedDataTile.distance = selectedTile.distance + storedDataTile.landSpeed;
+                        heapTile.Add(storedDataTile);
                     }
 
                 }
+
+                heapTile.BuildHeap();
             }
 
         }
