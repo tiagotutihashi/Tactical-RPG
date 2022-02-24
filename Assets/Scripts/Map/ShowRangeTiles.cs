@@ -169,9 +169,7 @@ public class ShowRangeTiles : MonoBehaviour {
         rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
 
         if (unitSelected != null) {
-            UnitMover unitMover = unitSelected.GetComponent<UnitMover>();
-
-            if (unitMover != null) {
+            if (unitSelected.TryGetComponent<UnitMover>(out UnitMover unitMover)) {
                 // StartCoroutine(unitMover.MoveUnitTo());
             }
         }
