@@ -72,7 +72,7 @@ public class ShowRangeTiles : MonoBehaviour {
 
     private void onClickMap() {
 
-        GetMoveRange(6);
+        GetMoveRange(3);
 
     }
 
@@ -95,13 +95,33 @@ public class ShowRangeTiles : MonoBehaviour {
 
         CustomGrid unitGrid = gridManager.VerifyIfContains(new Vector2(gridPosition.x, gridPosition.y));
 
-        if (unitGrid == null) {
-            unitSelected = null;
-            return;
-        }
-
         if (unitSelected == null) {
+            if (unitGrid == null) {
+                unitSelected = null;
+                return;
+            }
             unitSelected = unitGrid.Unit;
+        } else if (storedDataTiles.Count > 0) {
+            foreach (StoredDataTile storedDataTile in storedDataTiles) {
+                if (storedDataTile.position.x == gridPosition.x && storedDataTile.position.y == gridPosition.y) {
+                    if (storedDataTile == storedDataTiles[0]) {
+                        unitSelected = null;
+                        return;
+                    }
+                    if (unitSelected.TryGetComponent<UnitMover>(out UnitMover unitMover)) {
+                        StartCoroutine(
+                            unitMover.MoveUnitTo(
+                                ReturnUnitPath(
+                                   storedDataTile
+                                )
+                            ));
+                        gridManager.ChangeUnitGrid(unitMover.GetComponent<Unit>(), storedDataTile.position);
+                        unitSelected = null;
+                        return;
+                    }
+                }
+            }
+            unitSelected = null;
         }
 
         // Making the map
@@ -131,8 +151,7 @@ public class ShowRangeTiles : MonoBehaviour {
                     Vector3Int cellPostion = new Vector3Int(newX, newY, gridPosition.z);
                     TileBase currentCell = map.GetTile(cellPostion);
 
-                    if (currentCell != null)
-                    {
+                    if (currentCell != null) {
                         StoredDataTile storedDataTile = new StoredDataTile();
                         storedDataTile.position = cellPostion;
                         storedDataTile.distance = Mathf.Infinity;
@@ -155,15 +174,12 @@ public class ShowRangeTiles : MonoBehaviour {
 
         range.RemoveAt(0);
         List<Vector3Int> toRemoveTiles = new List<Vector3Int>();
-        foreach (var tile in range)
-        {
-            if (gridManager.VerifyIfContains(new Vector2(tile.x, tile.y)) != null)
-            {
+        foreach (var tile in range) {
+            if (gridManager.VerifyIfContains(new Vector2(tile.x, tile.y)) != null) {
                 toRemoveTiles.Add(tile);
             }
         }
-        foreach (var tile in toRemoveTiles)
-        {
+        foreach (var tile in toRemoveTiles) {
             range.Remove(tile);
         }
 
@@ -176,12 +192,27 @@ public class ShowRangeTiles : MonoBehaviour {
         // Set the tiles that the unit can make action
         rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
 
-        if (unitSelected != null) {
-            if (unitSelected.TryGetComponent<UnitMover>(out UnitMover unitMover)) {
-                // StartCoroutine(unitMover.MoveUnitTo());
-            }
-        }
+    }
 
+    private List<Vector3Int> ReturnUnitPath(StoredDataTile finalTile) {
+
+        List<Vector3Int> path = new List<Vector3Int>();
+        StoredDataTile parentTile = finalTile;
+        bool isFinal = true;
+        if (parentTile == null) {
+            return path;
+        }
+        do {
+            path.Add(parentTile.position);
+            parentTile = parentTile.parent;
+            if (parentTile == null) {
+                isFinal = false;
+            }
+        } while (isFinal);
+
+        path.Reverse();
+
+        return path;
     }
 
     // Dijkstra Algorithm

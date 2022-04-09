@@ -189,7 +189,7 @@ MonoBehaviour:
   attack: 10
   defense: 10
   agility: 10
-  movement: 10
+  movement: 3
   isAlly: 1
 --- !u!114 &101753727
 MonoBehaviour:
@@ -912,7 +912,7 @@ MonoBehaviour:
   attack: 10
   defense: 10
   agility: 10
-  movement: 10
+  movement: 3
   isAlly: 1
 --- !u!114 &1043325272
 MonoBehaviour:
@@ -969,7 +969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d12801ec7b2c6146a1fdd4f723005ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnState: 0
+  currentTurnState: 0
   turnText: {fileID: 1612864392}
 --- !u!1 &1355947971
 GameObject:
@@ -5317,7 +5317,7 @@ MonoBehaviour:
   attack: 10
   defense: 10
   agility: 10
-  movement: 10
+  movement: 3
   isAlly: 1
 --- !u!114 &1723286772
 MonoBehaviour:
