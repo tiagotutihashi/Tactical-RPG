@@ -53,3 +53,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1561665dcd446f240a7feeee4c60373d, type: 2}
   - {fileID: 11400000, guid: fe69ba165a66bde43b7711563dce482e, type: 2}
   - {fileID: 11400000, guid: 09f346a5f3e58f542b27b54cb0abd1ce, type: 2}
+  unitSelected: {fileID: 0}
+  range: []
+  gridPosition: {x: 0, y: 0, z: 0}
+  selectedTile: {fileID: 0}

@@ -11,8 +11,15 @@ public class UnitManager : MonoBehaviour {
 
     [SerializeField]
     private List<Unit> unitlist = new List<Unit>();
-
     public List<Unit> Unitlist => unitlist;
+
+    [SerializeField]
+    private List<Unit> playerUnits = new List<Unit>();
+    public List<Unit> PlayerUnits => playerUnits;
+
+    [SerializeField]
+    private List<Unit> enemyUnits = new List<Unit>();
+    public List<Unit> EnemyUnits => enemyUnits;
 
     private void Awake() {
 
@@ -27,6 +34,7 @@ public class UnitManager : MonoBehaviour {
         foreach (Transform chiled in playerTransform) {
             Unit unit = chiled.GetComponent<Unit>();
             if (unit != null) {
+                playerUnits.Add(unit);
                 unitlist.Add(unit);
             }
         }
@@ -34,6 +42,7 @@ public class UnitManager : MonoBehaviour {
         foreach (Transform chiled in enemyTransform) {
             Unit unit = chiled.GetComponent<Unit>();
             if (unit != null) {
+                enemyUnits.Add(unit);
                 unitlist.Add(unit);
             }
         }

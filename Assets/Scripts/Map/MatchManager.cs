@@ -1,18 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public enum TurnState { START, PLAYERTURN, ENEMYTURN, WON, LOST, FLED }
 
 public class MatchManager : MonoBehaviour {
 
+    private UnitManager unitManager;
+
     [SerializeField]
-    private TurnState turnState;
+    private TurnState currentTurnState;
+    public TurnState CurrentTurnState => currentTurnState;
+
+    [SerializeField]
+    private TextMeshProUGUI turnText;
+
+    private int playerUnitActions = 0;
+    private int enemyUnitActions = 0;
+
+    private void Start() {
+        unitManager = FindObjectOfType<UnitManager>();
+    }
 
     public void StartMatch() {
         // TODO  
+        StartPlayerTurn();
     }
 
+    public void StartPlayerTurn() {
+        turnText.text = "Seu Turno";
+        playerUnitActions = 0;
+    }
 
+    public void PlayerUnitMadeAction() {
+        playerUnitActions += 1;
+        if (playerUnitActions >= unitManager.PlayerUnits.Count) {
+            StartEnemyTurn();
+        }
+    }
+
+    public void StartEnemyTurn() {
+        turnText.text = "Inimigo Turno";
+        enemyUnitActions = 0;
+    }
+
+    public void EnemyUnitMadeAction() {
+        enemyUnitActions += 1;
+        if (enemyUnitActions >= unitManager.EnemyUnits.Count) {
+            StartPlayerTurn();
+        }
+    }
 
 }

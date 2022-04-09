@@ -56,4 +56,16 @@ public class GridManager : MonoBehaviour {
 
     }
 
+    public void ChangeUnitGrid(Unit unitMoved, Vector3Int newPosition) {
+        foreach (CustomGrid grid in gridList) {
+            if (
+                grid.Unit == unitMoved
+            ) {
+                grid.SetIndex(newPosition.x, newPosition.y);
+                grid.name = "(" + newPosition.x + ", " + newPosition.y + ")";
+                break;
+            }
+        }
+    }
+
 }
