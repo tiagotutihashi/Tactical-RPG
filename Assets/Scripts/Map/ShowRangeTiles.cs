@@ -72,11 +72,11 @@ public class ShowRangeTiles : MonoBehaviour {
 
     private void onClickMap() {
 
-        GetMoveRange(3);
+        GetMoveRange();
 
     }
 
-    private void GetMoveRange(int amount) {
+    private void GetMoveRange() {
 
         rangeTileMap.ClearAllTiles();
 
@@ -100,11 +100,18 @@ public class ShowRangeTiles : MonoBehaviour {
                 unitSelected = null;
                 return;
             }
+            if (unitGrid.Unit.TryGetComponent<UnitMatch>(out UnitMatch unitMatch)) {
+                if (!unitMatch.IsAlly) {
+                    return;
+                }
+            }
             unitSelected = unitGrid.Unit;
         } else if (storedDataTiles.Count > 0) {
             foreach (StoredDataTile storedDataTile in storedDataTiles) {
                 if (storedDataTile.position.x == gridPosition.x && storedDataTile.position.y == gridPosition.y) {
-                    if (storedDataTile == storedDataTiles[0]) {
+                    if (storedDataTile == storedDataTiles[0]
+                        || gridManager.VerifyIfContains(new Vector2(gridPosition.x, gridPosition.y)) != null
+                    ) {
                         unitSelected = null;
                         return;
                     }
@@ -122,7 +129,10 @@ public class ShowRangeTiles : MonoBehaviour {
                 }
             }
             unitSelected = null;
+            return;
         }
+
+        int amount = unitSelected.Movement;
 
         // Making the map
         storedDataTiles.Clear();
@@ -150,6 +160,16 @@ public class ShowRangeTiles : MonoBehaviour {
 
                     Vector3Int cellPostion = new Vector3Int(newX, newY, gridPosition.z);
                     TileBase currentCell = map.GetTile(cellPostion);
+
+                    CustomGrid verifyUnitGridCurrentPosition = gridManager.VerifyIfContains(new Vector2(newX, newY));
+
+                    if (verifyUnitGridCurrentPosition != null) {
+                        if (unitSelected.TryGetComponent<UnitMatch>(out UnitMatch unitMatch)) {
+                            if (!unitMatch.IsAlly) {
+                                continue;
+                            }
+                        }
+                    }
 
                     if (currentCell != null) {
                         StoredDataTile storedDataTile = new StoredDataTile();

@@ -22,6 +22,10 @@ public class UnitMover : MonoBehaviour {
 
         }
 
+        ActionModal actionModal = FindObjectOfType<ActionModal>();
+        if (actionModal) {
+            actionModal.ShowModal();
+        }
     }
 
 }
