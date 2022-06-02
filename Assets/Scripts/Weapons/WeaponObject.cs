@@ -11,8 +11,11 @@ public class WeaponObject : ScriptableObject
     [Header("Base Stats")]
     [SerializeField]
     private int damage;
+    [SerializeField]
+    private int maxRange;
 
     public string WeaponName => weaponName;
     public string WeaponDescription => weaponDescription;
     public int Damage => damage;
+    public int MaxRange => maxRange;
 }
