@@ -6,6 +6,12 @@ public class UnitMover : MonoBehaviour {
 
     const int unitSpeed = 10;
 
+    private ActionModal actionModal;
+
+    private void Awake() {
+        actionModal = FindObjectOfType<ActionModal>();
+    }
+
     public IEnumerator MoveUnitTo(List<Vector3Int> path) {
 
         foreach (Vector3Int newPosition in path) {
@@ -22,7 +28,6 @@ public class UnitMover : MonoBehaviour {
 
         }
 
-        ActionModal actionModal = FindObjectOfType<ActionModal>();
         if (actionModal) {
             actionModal.ShowModal();
         }

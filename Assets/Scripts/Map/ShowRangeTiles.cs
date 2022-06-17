@@ -16,6 +16,7 @@ public class ShowRangeTiles : MonoBehaviour {
     private PlayerInput playerInput;
     [SerializeField]
     private GridManager gridManager;
+    private ActionModal actionModal;
 
     [SerializeField]
     private List<TileData> tileObjects;
@@ -42,6 +43,7 @@ public class ShowRangeTiles : MonoBehaviour {
 
         SetdataFromTiles();
         playerInput = new PlayerInput();
+        actionModal = FindObjectOfType<ActionModal>();
 
     }
 
@@ -77,6 +79,10 @@ public class ShowRangeTiles : MonoBehaviour {
     }
 
     private void GetMoveRange() {
+
+        if(actionModal.IsModalActive()){
+            return;
+        }
 
         rangeTileMap.ClearAllTiles();
 
