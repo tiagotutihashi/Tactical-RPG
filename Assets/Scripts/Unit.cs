@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class Unit : MonoBehaviour
-{
+public class Unit : MonoBehaviour {
     [Header("Stats")]
     [SerializeField]
     private int level;
@@ -20,10 +19,6 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private int movement;
 
-    [Header("Others")]
-    [SerializeField]
-    private bool isAlly;
-
     private JobBase job;
 
     public int Level => level;
@@ -34,20 +29,16 @@ public class Unit : MonoBehaviour
     public int Defense => defense;
     public int Agility => agility;
     public int Movement => movement;
-    public bool IsAlly => isAlly;
 
-    private void Awake()
-    {
+    private void Awake() {
         job = GetComponent<JobBase>();
     }
-    private void Start()
-    {
+    private void Start() {
         level = level == 0 ? 1 : level;
         SetUnitByLevel(level);
     }
 
-    public void SetUnitByLevel(int level)
-    {
+    public void SetUnitByLevel(int level) {
         this.level = level;
         exp = 0;
         maxHealth = job.JobObject.BaseHealth + (level - 1) * job.JobObject.IncrementHealth;
@@ -57,29 +48,24 @@ public class Unit : MonoBehaviour
         movement = job.JobObject.Movement;
     }
 
-    public void LevelUp()
-    {
+    public void LevelUp() {
         level++;
         maxHealth += job.JobObject.IncrementHealth;
         attack += job.JobObject.IncrementAttack;
         defense += job.JobObject.IncrementDefense;
     }
 
-    public void EarnExp(bool isKill)
-    {
+    public void EarnExp(bool isKill) {
         // Base exp gain values for normal action and kill
         int expGain = isKill ? 40 : 15;
 
         // Reduction of exp gain by level
         expGain = Mathf.FloorToInt(expGain * (101 - level) / 100);
 
-        if (exp + expGain >= 100)
-        {
+        if (exp + expGain >= 100) {
             exp = exp + expGain - 100;
             LevelUp();
-        }
-        else
-        {
+        } else {
             exp += expGain;
         }
     }
