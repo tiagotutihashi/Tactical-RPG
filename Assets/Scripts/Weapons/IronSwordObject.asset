@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 809a31285ca37da42977f4cde8ee6c67, type: 3}
   m_Name: IronSwordObject
   m_EditorClassIdentifier: 
-  weaponName: Swo
-  weaponDescription: 
-  damage: 0
-  maxRange: 0
+  weaponName: Iron Sword
+  weaponDescription: The weakest sword a man can create
+  damage: 3
+  maxRange: 1
