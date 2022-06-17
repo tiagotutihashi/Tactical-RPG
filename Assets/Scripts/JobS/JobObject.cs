@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Job", menuName = "Job")]
@@ -17,8 +18,6 @@ public class JobObject : ScriptableObject
     [SerializeField]
     private int baseDefense;
     [SerializeField]
-    private int baseAgility;
-    [SerializeField]
     private int movement;
 
     [Header("Level Increment Stats")]
@@ -28,18 +27,19 @@ public class JobObject : ScriptableObject
     private int incrementAttack;
     [SerializeField]
     private int incrementDefense;
+
+    [Header("Weapons Used")]
     [SerializeField]
-    private int incrementAgility;
+    private List<string> weaponsUsed;
 
     public string JobName => jobName;
     public string JobDescription => jobDescription;
     public int BaseHealth => baseHealth;
     public int BaseAttack => baseAttack;
     public int BaseDefense => baseDefense;
-    public int BaseAgility => baseAgility;
     public int Movement => movement;
     public int IncrementHealth => incrementHealth;
     public int IncrementAttack => incrementAttack;
     public int IncrementDefense => incrementDefense;
-    public int IncrementAgility => incrementAgility;
+    public List<string> WeaponsUsed => weaponsUsed;
 }

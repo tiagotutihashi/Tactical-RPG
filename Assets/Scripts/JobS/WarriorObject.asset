@@ -17,9 +17,9 @@ MonoBehaviour:
   baseHealth: 20
   baseAttack: 5
   baseDefense: 5
-  baseAgility: 5
   movement: 4
   incrementHealth: 5
   incrementAttack: 2
   incrementDefense: 2
-  incrementAgility: 1
+  weaponsUsed:
+  - Sword

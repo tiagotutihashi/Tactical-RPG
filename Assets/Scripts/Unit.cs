@@ -54,7 +54,6 @@ public class Unit : MonoBehaviour
         health = maxHealth;
         attack = job.JobObject.BaseAttack + (level - 1) * job.JobObject.IncrementAttack;
         defense = job.JobObject.BaseDefense + (level - 1) * job.JobObject.IncrementDefense;
-        agility = job.JobObject.BaseAgility + (level - 1) * job.JobObject.IncrementAgility;
         movement = job.JobObject.Movement;
     }
 
@@ -64,7 +63,6 @@ public class Unit : MonoBehaviour
         maxHealth += job.JobObject.IncrementHealth;
         attack += job.JobObject.IncrementAttack;
         defense += job.JobObject.IncrementDefense;
-        agility += job.JobObject.IncrementAgility;
     }
 
     public void EarnExp(bool isKill)
@@ -84,5 +82,11 @@ public class Unit : MonoBehaviour
         {
             exp += expGain;
         }
+    }
+
+    public int DealDamage()
+    {
+        // Implementar função que aplica dano
+        return 0;
     }
 }
