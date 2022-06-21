@@ -30,6 +30,7 @@ public class MatchManager : MonoBehaviour {
 
     public void StartPlayerTurn() {
         turnText.text = "Seu Turno";
+        unitManager.PlayerRemoveMoved();
         playerUnitActions = 0;
     }
 

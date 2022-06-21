@@ -8,6 +8,12 @@ public class ActionModal : MonoBehaviour {
     [SerializeField]
     private GameObject buttonContainer;
 
+    private UnitManager unitManager;
+
+    private void Awake() {
+        unitManager = FindObjectOfType<UnitManager>();
+    }
+
     public bool IsModalActive(){
         return buttonContainer.activeInHierarchy;
     }

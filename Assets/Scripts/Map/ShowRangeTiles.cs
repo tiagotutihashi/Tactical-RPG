@@ -109,6 +109,8 @@ public class ShowRangeTiles : MonoBehaviour {
             if (unitGrid.Unit.TryGetComponent<UnitMatch>(out UnitMatch unitMatch)) {
                 if (!unitMatch.IsAlly) {
                     return;
+                } else if(unitMatch.Moved) {
+                    return;
                 }
             }
             unitSelected = unitGrid.Unit;
