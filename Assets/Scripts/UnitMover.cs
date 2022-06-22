@@ -13,7 +13,7 @@ public class UnitMover : MonoBehaviour {
     }
 
     public IEnumerator MoveUnitTo(List<Vector3Int> path) {
-        
+
         foreach (Vector3Int newPosition in path) {
 
             Vector3 startPosition = transform.position;
@@ -31,6 +31,12 @@ public class UnitMover : MonoBehaviour {
         if (actionModal) {
             actionModal.ShowModal();
         }
+    }
+
+    public void TeleportUnitTo(Vector3Int destination) {
+
+        transform.position = destination;
+
     }
 
 }

@@ -9,7 +9,28 @@ public class PathManager : MonoBehaviour {
     [SerializeField]
     private List<StoredDataTile> storedDataTiles = new List<StoredDataTile>();
 
-    private void CalcMovement(Vector3Int initialPosition, List<StoredDataTile> storedDataTiles, int amountMove) {
+    public List<Vector3Int> ReturnUnitPath(StoredDataTile finalTile) {
+
+        List<Vector3Int> path = new List<Vector3Int>();
+        StoredDataTile parentTile = finalTile;
+        bool isFinal = true;
+        if (parentTile == null) {
+            return path;
+        }
+        do {
+            path.Add(parentTile.position);
+            parentTile = parentTile.parent;
+            if (parentTile == null) {
+                isFinal = false;
+            }
+        } while (isFinal);
+
+        path.Reverse();
+
+        return path;
+    }
+
+    public List<StoredDataTile> CalcMovement(Vector3Int initialPosition, List<StoredDataTile> storedDataTiles, int amountMove) {
 
         StoredDataTile startTile = storedDataTiles[0];
         startTile.visited = true;
@@ -43,6 +64,8 @@ public class PathManager : MonoBehaviour {
         }
 
         storedDataTiles.RemoveAll(x => !x.visited);
+
+        return storedDataTiles;
 
     }
 
