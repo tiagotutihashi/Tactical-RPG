@@ -49,4 +49,12 @@ public class UnitManager : MonoBehaviour {
 
     }
 
+    public void PlayerRemoveMoved(){
+        playerUnits.ForEach(item => {
+            if(item.TryGetComponent<UnitMatch>(out UnitMatch unitMatch)){
+                unitMatch.SetMoved(false);
+            }
+        });
+    }
+
 }

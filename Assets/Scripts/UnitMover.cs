@@ -33,4 +33,10 @@ public class UnitMover : MonoBehaviour {
         }
     }
 
+    public void TeleportUnitTo(Vector3Int destination) {
+
+        transform.position = destination;
+
+    }
+
 }

@@ -30,11 +30,15 @@ public class MatchManager : MonoBehaviour {
 
     public void StartPlayerTurn() {
         turnText.text = "Seu Turno";
+        unitManager.PlayerRemoveMoved();
         playerUnitActions = 0;
     }
 
-    public void PlayerUnitMadeAction() {
+    public void PlayerUnitMadeAction(Unit unit) {
         playerUnitActions += 1;
+        if (unit.TryGetComponent<UnitMatch>(out UnitMatch unitMatch)) {
+            unitMatch.SetMoved(true);
+        }
         if (playerUnitActions >= unitManager.PlayerUnits.Count) {
             StartEnemyTurn();
         }

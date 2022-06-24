@@ -6,14 +6,14 @@ public class UnitMatch : MonoBehaviour {
 
     [SerializeField]
     private bool isAlly;
-    private bool moved;
+    private bool moved ;
 
     public bool IsAlly => isAlly;
 
     public bool Moved => moved;
-
-    public void ToggleMoved() {
-        moved = !moved;
+   
+    public void SetMoved(bool newValue){
+        moved = newValue;
     }
 
 }

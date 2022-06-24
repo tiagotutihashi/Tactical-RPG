@@ -17,6 +17,8 @@ public class ShowRangeTiles : MonoBehaviour {
     [SerializeField]
     private GridManager gridManager;
     private ActionModal actionModal;
+    private PathManager pathManager;
+    private UnitMoverManager unitMoverManager;
 
     [SerializeField]
     private List<TileData> tileObjects;
@@ -25,16 +27,11 @@ public class ShowRangeTiles : MonoBehaviour {
     private Dictionary<TileBase, TileData> dataFromTiles;
 
     [SerializeField]
-    private Unit unitSelected;
-
-    [SerializeField]
-    private List<Vector3Int> range = new List<Vector3Int>();
-
-    [SerializeField]
     private List<StoredDataTile> storedDataTiles = new List<StoredDataTile>();
 
     [SerializeField]
     private Vector3Int gridPosition;
+    public Vector3Int GridPosition => gridPosition;
 
     [SerializeField]
     private TileBase selectedTile;
@@ -44,6 +41,9 @@ public class ShowRangeTiles : MonoBehaviour {
         SetdataFromTiles();
         playerInput = new PlayerInput();
         actionModal = FindObjectOfType<ActionModal>();
+
+        pathManager = FindObjectOfType<PathManager>();
+        unitMoverManager = FindObjectOfType<UnitMoverManager>();
 
     }
 
@@ -80,7 +80,7 @@ public class ShowRangeTiles : MonoBehaviour {
 
     private void GetMoveRange() {
 
-        if(actionModal.IsModalActive()){
+        if (actionModal.IsModalActive()) {
             return;
         }
 
@@ -101,44 +101,13 @@ public class ShowRangeTiles : MonoBehaviour {
 
         CustomGrid unitGrid = gridManager.VerifyIfContains(new Vector2(gridPosition.x, gridPosition.y));
 
-        if (unitSelected == null) {
-            if (unitGrid == null) {
-                unitSelected = null;
-                return;
-            }
-            if (unitGrid.Unit.TryGetComponent<UnitMatch>(out UnitMatch unitMatch)) {
-                if (!unitMatch.IsAlly) {
-                    return;
-                }
-            }
-            unitSelected = unitGrid.Unit;
-        } else if (storedDataTiles.Count > 0) {
-            foreach (StoredDataTile storedDataTile in storedDataTiles) {
-                if (storedDataTile.position.x == gridPosition.x && storedDataTile.position.y == gridPosition.y) {
-                    if (storedDataTile == storedDataTiles[0]
-                        || gridManager.VerifyIfContains(new Vector2(gridPosition.x, gridPosition.y)) != null
-                    ) {
-                        unitSelected = null;
-                        return;
-                    }
-                    if (unitSelected.TryGetComponent<UnitMover>(out UnitMover unitMover)) {
-                        StartCoroutine(
-                            unitMover.MoveUnitTo(
-                                ReturnUnitPath(
-                                   storedDataTile
-                                )
-                            ));
-                        gridManager.ChangeUnitGrid(unitMover.GetComponent<Unit>(), storedDataTile.position);
-                        unitSelected = null;
-                        return;
-                    }
-                }
-            }
-            unitSelected = null;
+        bool madeMovement = unitMoverManager.MakeMovement(unitGrid, storedDataTiles, gridPosition);
+
+        if (madeMovement) {
             return;
         }
 
-        int amount = unitSelected.Movement;
+        int amount = unitMoverManager.UnitSelected.Movement;
 
         // Making the map
         storedDataTiles.Clear();
@@ -154,7 +123,16 @@ public class ShowRangeTiles : MonoBehaviour {
         initialStoredDataTile.remainMovement = amount;
         storedDataTiles.Add(initialStoredDataTile);
 
-        // Create the "Rhombus"
+        CreateRhombus(amount);
+
+        pathManager.CalcMovement(gridPosition, storedDataTiles, amount);
+
+        ShowMovementTiles();
+
+    }
+
+    // Create the "Rhombus"
+    private void CreateRhombus(int amount) {
         for (int x = -amount; x <= amount; x++) {
             for (int y = -amount; y <= amount; y++) {
 
@@ -169,14 +147,6 @@ public class ShowRangeTiles : MonoBehaviour {
 
                     CustomGrid verifyUnitGridCurrentPosition = gridManager.VerifyIfContains(new Vector2(newX, newY));
 
-                    if (verifyUnitGridCurrentPosition != null) {
-                        if (unitSelected.TryGetComponent<UnitMatch>(out UnitMatch unitMatch)) {
-                            if (!unitMatch.IsAlly) {
-                                continue;
-                            }
-                        }
-                    }
-
                     if (currentCell != null) {
                         StoredDataTile storedDataTile = new StoredDataTile();
                         storedDataTile.position = cellPostion;
@@ -189,10 +159,11 @@ public class ShowRangeTiles : MonoBehaviour {
 
             }
         }
+    }
 
-        CalcMovement(gridPosition, storedDataTiles, amount);
-
-        range.Clear();
+    // 
+    private void ShowMovementTiles() {
+        List<Vector3Int> range = new List<Vector3Int>();
 
         foreach (StoredDataTile storedDataTile in storedDataTiles) {
             range.Add(storedDataTile.position);
@@ -217,66 +188,6 @@ public class ShowRangeTiles : MonoBehaviour {
 
         // Set the tiles that the unit can make action
         rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
-
-    }
-
-    private List<Vector3Int> ReturnUnitPath(StoredDataTile finalTile) {
-
-        List<Vector3Int> path = new List<Vector3Int>();
-        StoredDataTile parentTile = finalTile;
-        bool isFinal = true;
-        if (parentTile == null) {
-            return path;
-        }
-        do {
-            path.Add(parentTile.position);
-            parentTile = parentTile.parent;
-            if (parentTile == null) {
-                isFinal = false;
-            }
-        } while (isFinal);
-
-        path.Reverse();
-
-        return path;
-    }
-
-    // Dijkstra Algorithm
-    private void CalcMovement(Vector3Int initialPosition, List<StoredDataTile> storedDataTiles, int amountMove) {
-
-        StoredDataTile startTile = storedDataTiles[0];
-        startTile.visited = true;
-        startTile.remainMovement = amountMove;
-
-        MinHeap<StoredDataTile> heapTile = new MinHeap<StoredDataTile>(storedDataTiles.Count, x => x.distance);
-
-        heapTile.Add(startTile);
-
-        while (heapTile.Count() > 0) {
-
-            StoredDataTile selectedTile = heapTile.RemoveMin();
-
-            if (selectedTile.remainMovement > 0) {
-                List<StoredDataTile> neighbor = storedDataTiles.Where(x => Mathf.Abs(selectedTile.position.x - x.position.x) + Mathf.Abs(selectedTile.position.y - x.position.y) == 1).ToList();
-
-                foreach (StoredDataTile storedDataTile in neighbor) {
-                    if (storedDataTile.distance > selectedTile.distance + storedDataTile.landSpeed && selectedTile.remainMovement > storedDataTile.landSpeed - 1) {
-                        storedDataTile.parent = selectedTile;
-                        storedDataTile.visited = true;
-                        storedDataTile.remainMovement = selectedTile.remainMovement - storedDataTile.landSpeed;
-                        storedDataTile.distance = selectedTile.distance + storedDataTile.landSpeed;
-                        heapTile.Add(storedDataTile);
-                    }
-
-                }
-
-                heapTile.BuildHeap();
-            }
-
-        }
-
-        storedDataTiles.RemoveAll(x => !x.visited);
-
     }
 
 }
