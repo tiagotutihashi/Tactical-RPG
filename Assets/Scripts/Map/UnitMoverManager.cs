@@ -6,6 +6,7 @@ public class UnitMoverManager : MonoBehaviour {
 
     private GridManager gridManager;
     private PathManager pathManager;
+    private ActionModal actionModal;
 
     [SerializeField]
     private Unit unitSelected;
@@ -18,6 +19,7 @@ public class UnitMoverManager : MonoBehaviour {
     private void Awake() {
         gridManager = FindObjectOfType<GridManager>();
         pathManager = FindObjectOfType<PathManager>();
+        actionModal = FindObjectOfType<ActionModal>();
     }
 
     public bool MakeMovement(CustomGrid unitGrid, List<StoredDataTile> storedDataTiles, Vector3Int gridPosition) {
@@ -51,6 +53,11 @@ public class UnitMoverManager : MonoBehaviour {
                                 path
                             ));
                         gridManager.ChangeUnitGrid(unitMover.GetComponent<Unit>(), storedDataTile.position);
+
+                        if (actionModal) {
+                            actionModal.ShowModal();
+                        }
+
                         return true;
                     }
                 }

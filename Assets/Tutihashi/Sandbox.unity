@@ -191,6 +191,7 @@ MonoBehaviour:
   defense: 10
   agility: 10
   movement: 5
+  weapon: {fileID: 7820703775971068480, guid: 1a0f84c798919a1408be74fa74665b0d, type: 3}
 --- !u!114 &101753727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -685,6 +686,7 @@ MonoBehaviour:
   defense: 10
   agility: 10
   movement: 10
+  weapon: {fileID: 7820703775971068480, guid: 1a0f84c798919a1408be74fa74665b0d, type: 3}
 --- !u!114 &307165450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -778,6 +780,7 @@ MonoBehaviour:
   defense: 10
   agility: 10
   movement: 10
+  weapon: {fileID: 7820703775971068480, guid: 1a0f84c798919a1408be74fa74665b0d, type: 3}
 --- !u!114 &340994997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1168,6 +1171,7 @@ MonoBehaviour:
   defense: 10
   agility: 10
   movement: 10
+  weapon: {fileID: 7820703775971068480, guid: 1a0f84c798919a1408be74fa74665b0d, type: 3}
 --- !u!114 &991205314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1417,6 +1421,7 @@ MonoBehaviour:
   defense: 10
   agility: 10
   movement: 5
+  weapon: {fileID: 7820703775971068480, guid: 1a0f84c798919a1408be74fa74665b0d, type: 3}
 --- !u!114 &1043325272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6161,6 +6166,7 @@ MonoBehaviour:
   defense: 10
   agility: 10
   movement: 5
+  weapon: {fileID: 7820703775971068480, guid: 1a0f84c798919a1408be74fa74665b0d, type: 3}
 --- !u!114 &1723286772
 MonoBehaviour:
   m_ObjectHideFlags: 0

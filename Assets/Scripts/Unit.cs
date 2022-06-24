@@ -20,6 +20,7 @@ public class Unit : MonoBehaviour {
     private int movement;
 
     private JobBase job;
+    [SerializeField]
     private WeaponBase weapon;
 
     public int Level => level;
@@ -73,16 +74,14 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    public void DealDamage(Unit target)
-    {
+    public void DealDamage(Unit target) {
         int damage = attack + weapon.WeaponObject.Damage;
         target.ReceiveDamage(damage);
     }
 
-    public void ReceiveDamage(int damage)
-    {
+    public void ReceiveDamage(int damage) {
         int finalDamage = damage - defense;
         health = Mathf.Clamp(health - finalDamage, 0, health);
-        // Será necessário fazer alguma verificação de morte?
+        // Serï¿½ necessï¿½rio fazer alguma verificaï¿½ï¿½o de morte?
     }
 }
