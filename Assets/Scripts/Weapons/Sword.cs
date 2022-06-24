@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class Sword : WeaponBase
 {
-    public override List<Vector2Int> GetAttackedTiles(Vector2Int tile, Vector2Int direction)
+    public override List<Vector2Int> GetAttackedTiles(Vector2Int targetTile, Vector2Int targetTileDirection)
     {
         Vector2Int orthogonalDirection;
 
-        if (direction.x == 0)
+        if (targetTileDirection.x == 0)
         {
             orthogonalDirection = Vector2Int.right;
         }
@@ -18,9 +18,9 @@ public class Sword : WeaponBase
 
         return new List<Vector2Int>
         {
-            tile - orthogonalDirection,
-            tile,
-            tile + orthogonalDirection
+            targetTile - orthogonalDirection,
+            targetTile,
+            targetTile + orthogonalDirection
         };
     }
 }

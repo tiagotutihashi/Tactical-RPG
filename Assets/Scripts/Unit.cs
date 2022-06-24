@@ -20,6 +20,7 @@ public class Unit : MonoBehaviour {
     private int movement;
 
     private JobBase job;
+    private WeaponBase weapon;
 
     public int Level => level;
     public int Exp => exp;
@@ -32,7 +33,9 @@ public class Unit : MonoBehaviour {
 
     private void Awake() {
         job = GetComponent<JobBase>();
+        weapon = GetComponent<WeaponBase>();
     }
+
     private void Start() {
         level = level == 0 ? 1 : level;
         SetUnitByLevel(level);
@@ -70,9 +73,16 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    public int DealDamage()
+    public void DealDamage(Unit target)
     {
-        // Implementar função que aplica dano
-        return 0;
+        int damage = attack + weapon.WeaponObject.Damage;
+        target.ReceiveDamage(damage);
+    }
+
+    public void ReceiveDamage(int damage)
+    {
+        int finalDamage = damage - defense;
+        health = Mathf.Clamp(health - finalDamage, 0, health);
+        // Será necessário fazer alguma verificação de morte?
     }
 }
