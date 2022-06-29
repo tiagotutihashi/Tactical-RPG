@@ -170,7 +170,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018355b9a3cf7b448a12bc7bde56107d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jobObject: {fileID: 11400000, guid: df702285610fec84dbf9cc8faa333d63, type: 2}
+  jobName: 
+  jobDescription: 
+  baseHealth: 0
+  baseAttack: 0
+  baseDefense: 0
+  movement: 0
+  incrementHealth: 0
+  incrementAttack: 0
+  incrementDefense: 0
+  weaponsUsed: []
 --- !u!114 &101753726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,7 +198,6 @@ MonoBehaviour:
   health: 10
   attack: 10
   defense: 10
-  agility: 10
   movement: 5
 --- !u!114 &101753727
 MonoBehaviour:
@@ -630,7 +638,6 @@ GameObject:
   - component: {fileID: 307165448}
   - component: {fileID: 307165450}
   - component: {fileID: 307165451}
-  - component: {fileID: 307165452}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -665,7 +672,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018355b9a3cf7b448a12bc7bde56107d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jobObject: {fileID: 11400000, guid: df702285610fec84dbf9cc8faa333d63, type: 2}
+  jobName: 
+  jobDescription: 
+  baseHealth: 0
+  baseAttack: 0
+  baseDefense: 0
+  movement: 0
+  incrementHealth: 0
+  incrementAttack: 0
+  incrementDefense: 0
+  weaponsUsed: []
 --- !u!114 &307165449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -684,7 +700,6 @@ MonoBehaviour:
   health: 10
   attack: 10
   defense: 10
-  agility: 10
   movement: 10
 --- !u!114 &307165450
 MonoBehaviour:
@@ -711,19 +726,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isAlly: 1
---- !u!114 &307165452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 307165446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4abec1a09982184994076f201572326, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponObject: {fileID: 11400000, guid: 0753a9c130d60c64fabab7804eb76de4, type: 2}
 --- !u!1 &340994993
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,7 +739,6 @@ GameObject:
   - component: {fileID: 340994995}
   - component: {fileID: 340994997}
   - component: {fileID: 340994998}
-  - component: {fileID: 340994999}
   m_Layer: 0
   m_Name: Unit (1)
   m_TagString: Untagged
@@ -772,7 +773,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018355b9a3cf7b448a12bc7bde56107d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jobObject: {fileID: 11400000, guid: df702285610fec84dbf9cc8faa333d63, type: 2}
+  jobName: 
+  jobDescription: 
+  baseHealth: 0
+  baseAttack: 0
+  baseDefense: 0
+  movement: 0
+  incrementHealth: 0
+  incrementAttack: 0
+  incrementDefense: 0
+  weaponsUsed: []
 --- !u!114 &340994996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -791,7 +801,6 @@ MonoBehaviour:
   health: 10
   attack: 10
   defense: 10
-  agility: 10
   movement: 10
 --- !u!114 &340994997
 MonoBehaviour:
@@ -818,19 +827,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isAlly: 1
---- !u!114 &340994999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 340994993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4abec1a09982184994076f201572326, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponObject: {fileID: 0}
 --- !u!1 &617698499
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,7 +1137,6 @@ GameObject:
   - component: {fileID: 991205312}
   - component: {fileID: 991205314}
   - component: {fileID: 991205315}
-  - component: {fileID: 991205316}
   m_Layer: 0
   m_Name: Unit (2)
   m_TagString: Untagged
@@ -1176,7 +1171,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018355b9a3cf7b448a12bc7bde56107d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jobObject: {fileID: 11400000, guid: df702285610fec84dbf9cc8faa333d63, type: 2}
+  jobName: 
+  jobDescription: 
+  baseHealth: 0
+  baseAttack: 0
+  baseDefense: 0
+  movement: 0
+  incrementHealth: 0
+  incrementAttack: 0
+  incrementDefense: 0
+  weaponsUsed: []
 --- !u!114 &991205313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1195,7 +1199,6 @@ MonoBehaviour:
   health: 10
   attack: 10
   defense: 10
-  agility: 10
   movement: 10
 --- !u!114 &991205314
 MonoBehaviour:
@@ -1222,19 +1225,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isAlly: 1
---- !u!114 &991205316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 991205310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4abec1a09982184994076f201572326, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponObject: {fileID: 0}
 --- !u!1 &1001148744
 GameObject:
   m_ObjectHideFlags: 0
@@ -1438,7 +1428,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018355b9a3cf7b448a12bc7bde56107d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jobObject: {fileID: 11400000, guid: df702285610fec84dbf9cc8faa333d63, type: 2}
+  jobName: 
+  jobDescription: 
+  baseHealth: 0
+  baseAttack: 0
+  baseDefense: 0
+  movement: 0
+  incrementHealth: 0
+  incrementAttack: 0
+  incrementDefense: 0
+  weaponsUsed: []
 --- !u!114 &1043325271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1457,7 +1456,6 @@ MonoBehaviour:
   health: 10
   attack: 10
   defense: 10
-  agility: 10
   movement: 5
 --- !u!114 &1043325272
 MonoBehaviour:
@@ -6227,7 +6225,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018355b9a3cf7b448a12bc7bde56107d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jobObject: {fileID: 11400000, guid: df702285610fec84dbf9cc8faa333d63, type: 2}
+  jobName: 
+  jobDescription: 
+  baseHealth: 0
+  baseAttack: 0
+  baseDefense: 0
+  movement: 0
+  incrementHealth: 0
+  incrementAttack: 0
+  incrementDefense: 0
+  weaponsUsed: []
 --- !u!114 &1723286771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6246,7 +6253,6 @@ MonoBehaviour:
   health: 10
   attack: 10
   defense: 10
-  agility: 10
   movement: 5
 --- !u!114 &1723286772
 MonoBehaviour:

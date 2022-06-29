@@ -15,8 +15,6 @@ public class Unit : MonoBehaviour {
     [SerializeField]
     private int defense;
     [SerializeField]
-    private int agility;
-    [SerializeField]
     private int movement;
 
     private JobBase job;
@@ -28,7 +26,6 @@ public class Unit : MonoBehaviour {
     public int Health => health;
     public int Attack => attack;
     public int Defense => defense;
-    public int Agility => agility;
     public int Movement => movement;
 
     private void Awake() {
@@ -44,18 +41,18 @@ public class Unit : MonoBehaviour {
     public void SetUnitByLevel(int level) {
         this.level = level;
         exp = 0;
-        maxHealth = job.JobObject.BaseHealth + (level - 1) * job.JobObject.IncrementHealth;
+        maxHealth = job.BaseHealth + (level - 1) * job.IncrementHealth;
         health = maxHealth;
-        attack = job.JobObject.BaseAttack + (level - 1) * job.JobObject.IncrementAttack;
-        defense = job.JobObject.BaseDefense + (level - 1) * job.JobObject.IncrementDefense;
-        movement = job.JobObject.Movement;
+        attack = job.BaseAttack + (level - 1) * job.IncrementAttack;
+        defense = job.BaseDefense + (level - 1) * job.IncrementDefense;
+        movement = job.Movement;
     }
 
     public void LevelUp() {
         level++;
-        maxHealth += job.JobObject.IncrementHealth;
-        attack += job.JobObject.IncrementAttack;
-        defense += job.JobObject.IncrementDefense;
+        maxHealth += job.IncrementHealth;
+        attack += job.IncrementAttack;
+        defense += job.IncrementDefense;
     }
 
     public void EarnExp(bool isKill) {
@@ -75,7 +72,7 @@ public class Unit : MonoBehaviour {
 
     public void DealDamage(Unit target)
     {
-        int damage = attack + weapon.WeaponObject.Damage;
+        int damage = attack + weapon.Damage;
         target.ReceiveDamage(damage);
     }
 
