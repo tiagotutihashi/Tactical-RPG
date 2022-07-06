@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Unit : MonoBehaviour {
@@ -17,6 +18,8 @@ public class Unit : MonoBehaviour {
     [SerializeField]
     private int movement;
 
+    private bool isDead;
+
     private JobBase job;
     private WeaponBase weapon;
 
@@ -29,6 +32,8 @@ public class Unit : MonoBehaviour {
     public int Movement => movement;
 
     private void Awake() {
+        isDead = false;
+
         job = GetComponent<JobBase>();
         weapon = GetComponent<WeaponBase>();
     }
@@ -78,8 +83,42 @@ public class Unit : MonoBehaviour {
 
     public void ReceiveDamage(int damage)
     {
-        int finalDamage = damage - defense;
+        int finalDamage = Mathf.Clamp(damage - defense, 1, damage);
         health = Mathf.Clamp(health - finalDamage, 0, health);
-        // Será necessário fazer alguma verificação de morte?
+        
+        if (health == 0 && !isDead)
+        {
+            StartCoroutine(Die());
+        }
+    }
+
+    private IEnumerator Die()
+    {
+        SpriteEffect spriteEffect = GetComponentInChildren<SpriteEffect>();
+
+        isDead = true;
+
+        if (spriteEffect != null)
+        {
+            yield return StartCoroutine(spriteEffect.FadeTo(0.0f, 1.0f));
+            DestroyUnit();
+        }
+        else
+        {
+            Debug.LogError("SpriteEffect component not found in Unit child game object");
+        }
+    }
+
+    private void DestroyUnit()
+    {
+        UnitManager unitManager = FindObjectOfType<UnitManager>();
+        UnitMatch unitMatch = GetComponent<UnitMatch>();
+
+        if (unitManager != null && unitMatch != null)
+        {
+            unitManager.RemoveUnit(this, unitMatch.IsAlly);
+        }
+
+        Destroy(gameObject);
     }
 }
