@@ -22,6 +22,7 @@ public class Unit : MonoBehaviour {
     private JobBase job;
     [SerializeField]
     private WeaponBase weapon;
+    public WeaponBase Weapon => weapon;
 
     public int Level => level;
     public int Exp => exp;
@@ -34,7 +35,6 @@ public class Unit : MonoBehaviour {
 
     private void Awake() {
         job = GetComponent<JobBase>();
-        weapon = GetComponent<WeaponBase>();
     }
 
     private void Start() {

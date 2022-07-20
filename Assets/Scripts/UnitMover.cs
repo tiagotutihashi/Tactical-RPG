@@ -5,6 +5,11 @@ using UnityEngine;
 public class UnitMover : MonoBehaviour {
 
     const int unitSpeed = 10;
+    private ShowRangeTiles showRangeTiles;
+
+    private void Awake() {
+        showRangeTiles = FindObjectOfType<ShowRangeTiles>();
+    }
 
     public IEnumerator MoveUnitTo(List<Vector3Int> path) {
 

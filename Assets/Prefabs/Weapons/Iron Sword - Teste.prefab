@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5515084609965533288}
   - component: {fileID: 7820703775971068480}
   m_Layer: 0
-  m_Name: Iron Sword
+  m_Name: Iron Sword - Teste
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
