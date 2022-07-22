@@ -11,11 +11,13 @@ public class ActionModal : MonoBehaviour {
     private UnitManager unitManager;
     private UnitMoverManager unitMoverManager;
     private MatchManager matchManager;
+    private ShowRangeTiles showRangeTiles;
 
     private void Awake() {
         unitManager = FindObjectOfType<UnitManager>();
         unitMoverManager = FindObjectOfType<UnitMoverManager>();
         matchManager = FindObjectOfType<MatchManager>();
+        showRangeTiles = FindObjectOfType<ShowRangeTiles>();
     }
 
     public bool IsModalActive() {
@@ -23,6 +25,7 @@ public class ActionModal : MonoBehaviour {
     }
 
     public void ShowModal() {
+        showRangeTiles.ShowSelectedAttackRange();
         buttonContainer.SetActive(true);
     }
 
@@ -31,25 +34,29 @@ public class ActionModal : MonoBehaviour {
     }
 
     public void AttackButtonAction() {
-        //TODO
+
+        showRangeTiles.ClearAllTiles();
         Debug.Log("Acao do botao de attack");
+
     }
 
     public void WaitButtonAction() {
-        // TODO
-        Debug.Log("Acao do botao de wait");
+
+        showRangeTiles.ClearAllTiles();
         matchManager.PlayerUnitMadeAction(unitMoverManager.UnitSelected);
         unitMoverManager.CleanUnitSelected();
         CloseModal();
+
     }
 
     public void BackButtonAction() {
-        // TODO
-        Debug.Log("Acao do botao de back");
+
+        showRangeTiles.ClearAllTiles();
         bool movedBack = unitMoverManager.MoveUnitBack();
         if (movedBack) {
             CloseModal();
         }
+
     }
 
 }

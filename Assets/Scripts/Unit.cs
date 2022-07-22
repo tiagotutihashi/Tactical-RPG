@@ -21,7 +21,9 @@ public class Unit : MonoBehaviour {
     private bool isDead;
 
     private JobBase job;
+    [SerializeField]
     private WeaponBase weapon;
+    public WeaponBase Weapon => weapon;
 
     public int Level => level;
     public int Exp => exp;
@@ -35,7 +37,6 @@ public class Unit : MonoBehaviour {
         isDead = false;
 
         job = GetComponent<JobBase>();
-        weapon = GetComponent<WeaponBase>();
     }
 
     private void Start() {
@@ -75,47 +76,38 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    public void DealDamage(Unit target)
-    {
+    public void DealDamage(Unit target) {
         int damage = attack + weapon.Damage;
         target.ReceiveDamage(damage);
     }
 
-    public void ReceiveDamage(int damage)
-    {
+    public void ReceiveDamage(int damage) {
         int finalDamage = Mathf.Clamp(damage - defense, 1, damage);
         health = Mathf.Clamp(health - finalDamage, 0, health);
-        
-        if (health == 0 && !isDead)
-        {
+
+        if (health == 0 && !isDead) {
             StartCoroutine(Die());
         }
     }
 
-    private IEnumerator Die()
-    {
+    private IEnumerator Die() {
         SpriteEffect spriteEffect = GetComponentInChildren<SpriteEffect>();
 
         isDead = true;
 
-        if (spriteEffect != null)
-        {
+        if (spriteEffect != null) {
             yield return StartCoroutine(spriteEffect.FadeTo(0.0f, 1.0f));
             DestroyUnit();
-        }
-        else
-        {
+        } else {
             Debug.LogError("SpriteEffect component not found in Unit child game object");
         }
     }
 
-    private void DestroyUnit()
-    {
+    private void DestroyUnit() {
         UnitManager unitManager = FindObjectOfType<UnitManager>();
         UnitMatch unitMatch = GetComponent<UnitMatch>();
 
-        if (unitManager != null && unitMatch != null)
-        {
+        if (unitManager != null && unitMatch != null) {
             unitManager.RemoveUnit(this, unitMatch.IsAlly);
         }
 

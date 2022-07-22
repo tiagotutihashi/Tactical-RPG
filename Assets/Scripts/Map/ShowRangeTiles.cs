@@ -19,6 +19,7 @@ public class ShowRangeTiles : MonoBehaviour {
     private ActionModal actionModal;
     private PathManager pathManager;
     private UnitMoverManager unitMoverManager;
+    private BattleManager battleManager;
 
     [SerializeField]
     private List<TileData> tileObjects;
@@ -44,6 +45,8 @@ public class ShowRangeTiles : MonoBehaviour {
 
         pathManager = FindObjectOfType<PathManager>();
         unitMoverManager = FindObjectOfType<UnitMoverManager>();
+        gridManager = FindObjectOfType<GridManager>();
+        battleManager = FindObjectOfType<BattleManager>();
 
     }
 
@@ -58,7 +61,12 @@ public class ShowRangeTiles : MonoBehaviour {
     private void Start() {
 
         playerInput.Camera.MouseClick.performed += _ => onClickMap();
-        gridManager = FindObjectOfType<GridManager>();
+
+    }
+
+    private void onClickMap() {
+
+        GetMoveRange();
 
     }
 
@@ -72,13 +80,11 @@ public class ShowRangeTiles : MonoBehaviour {
         }
     }
 
-    private void onClickMap() {
-
-        GetMoveRange();
-
+    public void ClearAllTiles() {
+        rangeTileMap.ClearAllTiles();
     }
 
-    private void GetMoveRange() {
+    public void GetMoveRange() {
 
         if (actionModal.IsModalActive()) {
             return;
@@ -87,7 +93,6 @@ public class ShowRangeTiles : MonoBehaviour {
         rangeTileMap.ClearAllTiles();
 
         Vector2 mousePosition = playerInput.Camera.MousePositon.ReadValue<Vector2>();
-
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
         gridPosition = map.WorldToCell(mousePosition);
@@ -161,7 +166,6 @@ public class ShowRangeTiles : MonoBehaviour {
         }
     }
 
-    // 
     private void ShowMovementTiles() {
         List<Vector3Int> range = new List<Vector3Int>();
 
@@ -188,6 +192,41 @@ public class ShowRangeTiles : MonoBehaviour {
 
         // Set the tiles that the unit can make action
         rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
+    }
+
+    public void ShowAttackRange(Unit unit) {
+
+        if (unit.Weapon) {
+            Vector2Int unitPosition = new Vector2Int(unitMoverManager.FinalPosition.x, unitMoverManager.FinalPosition.y);
+            Debug.Log(unit.Weapon.GetTilesInRange(unitPosition));
+        }
+
+    }
+
+    public void ShowSelectedAttackRange() {
+        List<Vector3Int> rangeBase = new List<Vector3Int>();
+        List<Vector3Int> range = new List<Vector3Int>();
+
+        Unit unit = unitMoverManager.UnitSelected;
+
+        Vector2Int unitPosition = new Vector2Int(unitMoverManager.FinalPosition.x, unitMoverManager.FinalPosition.y);
+        if (unit.Weapon) {
+            (rangeBase, range) = battleManager.EnemyInRange(unitPosition, unit.Weapon);
+        }
+
+        TileBase[] rangeTiles = new TileBase[range.Count + rangeBase.Count];
+        for (int i = 0; i < rangeTiles.Length; i++) {
+            if (i < range.Count) {
+                rangeTiles[i] = greenTile;
+            } else {
+                rangeTiles[i] = selectTile;
+            }
+        }
+
+        // Set the tiles that the unit can make action
+        range.AddRange(rangeBase);
+        rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
+
     }
 
 }

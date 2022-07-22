@@ -15,6 +15,12 @@ public class GridManager : MonoBehaviour {
     [SerializeField]
     private CustomGrid gridPrefab;
 
+    private UnitManager unitManager;
+
+    private void Awake() {
+        unitManager = FindObjectOfType<UnitManager>();
+    }
+
     void Start() {
         CreateGrid();
     }
@@ -66,6 +72,20 @@ public class GridManager : MonoBehaviour {
                 break;
             }
         }
+    }
+
+    public bool EnemyInGrid(Vector3Int enemyPosition) {
+        foreach (CustomGrid grid in gridList) {
+            if (
+                grid.IndexX == enemyPosition.x &&
+                grid.IndexY == enemyPosition.y
+            ) {
+                if (unitManager.EnemyUnits.Contains(grid.Unit)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

@@ -6,6 +6,7 @@ public class UnitMoverManager : MonoBehaviour {
 
     private GridManager gridManager;
     private PathManager pathManager;
+    private ActionModal actionModal;
 
     [SerializeField]
     private Unit unitSelected;
@@ -15,9 +16,30 @@ public class UnitMoverManager : MonoBehaviour {
     private Vector3Int initialPosition;
     public Vector3Int InitialPosition => initialPosition;
 
+    private Vector3Int finalPosition;
+    public Vector3Int FinalPosition => finalPosition;
+
     private void Awake() {
         gridManager = FindObjectOfType<GridManager>();
         pathManager = FindObjectOfType<PathManager>();
+        actionModal = FindObjectOfType<ActionModal>();
+    }
+
+    public IEnumerator UnitMovement(StoredDataTile storedDataTile, UnitMover unitMover) {
+
+        List<Vector3Int> path = pathManager.ReturnUnitPath(storedDataTile);
+        initialPosition = path[0];
+        yield return StartCoroutine(
+             unitMover.MoveUnitTo(
+                 path
+             ));
+        finalPosition = storedDataTile.position;
+        gridManager.ChangeUnitGrid(unitMover.GetComponent<Unit>(), storedDataTile.position);
+
+        if (actionModal) {
+            actionModal.ShowModal();
+        }
+
     }
 
     public bool MakeMovement(CustomGrid unitGrid, List<StoredDataTile> storedDataTiles, Vector3Int gridPosition) {
@@ -44,13 +66,9 @@ public class UnitMoverManager : MonoBehaviour {
                         return true;
                     }
                     if (unitSelected.TryGetComponent<UnitMover>(out UnitMover unitMover)) {
-                        List<Vector3Int> path = pathManager.ReturnUnitPath(storedDataTile);
-                        initialPosition = path[0];
-                        StartCoroutine(
-                            unitMover.MoveUnitTo(
-                                path
-                            ));
-                        gridManager.ChangeUnitGrid(unitMover.GetComponent<Unit>(), storedDataTile.position);
+
+                        StartCoroutine(UnitMovement(storedDataTile, unitMover));
+
                         return true;
                     }
                 }

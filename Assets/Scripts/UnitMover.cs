@@ -5,11 +5,10 @@ using UnityEngine;
 public class UnitMover : MonoBehaviour {
 
     const int unitSpeed = 10;
-
-    private ActionModal actionModal;
+    private ShowRangeTiles showRangeTiles;
 
     private void Awake() {
-        actionModal = FindObjectOfType<ActionModal>();
+        showRangeTiles = FindObjectOfType<ShowRangeTiles>();
     }
 
     public IEnumerator MoveUnitTo(List<Vector3Int> path) {
@@ -28,9 +27,6 @@ public class UnitMover : MonoBehaviour {
 
         }
 
-        if (actionModal) {
-            actionModal.ShowModal();
-        }
     }
 
     public void TeleportUnitTo(Vector3Int destination) {
