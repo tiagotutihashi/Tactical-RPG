@@ -57,4 +57,17 @@ public class UnitManager : MonoBehaviour {
         });
     }
 
+    public void RemoveUnit(Unit unit, bool isAlly)
+    {
+        unitlist.Remove(unit);
+
+        if (isAlly)
+        {
+            playerUnits.Remove(unit);
+        }
+        else
+        {
+            enemyUnits.Remove(unit);
+        }
+    }
 }

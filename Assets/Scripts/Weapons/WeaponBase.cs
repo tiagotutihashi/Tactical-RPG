@@ -3,10 +3,22 @@ using UnityEngine;
 
 public abstract class WeaponBase : MonoBehaviour
 {
+    [Header("Weapon Info")]
     [SerializeField]
-    private WeaponObject weaponObject;
+    private string weaponName;
+    [SerializeField]
+    private string weaponDescription;
 
-    public WeaponObject WeaponObject => weaponObject;
+    [Header("Base Stats")]
+    [SerializeField]
+    private int damage;
+    [SerializeField]
+    private int maxRange;
+
+    public string WeaponName => weaponName;
+    public string WeaponDescription => weaponDescription;
+    public int Damage => damage;
+    public int MaxRange => maxRange;
 
     public abstract List<Vector2Int> GetAttackedTiles(Vector2Int targetTile, Vector2Int targetTileDirection);
 
@@ -14,7 +26,7 @@ public abstract class WeaponBase : MonoBehaviour
     {
         List<Vector2Int> tilesInRange = new List<Vector2Int>();
 
-        for (int range = weaponObject.MaxRange; range > 0; range--)
+        for (int range = maxRange; range > 0; range--)
         {
             tilesInRange.AddRange(GetExternalTilesAtRange(attackerTile, range));
         }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Unit : MonoBehaviour {
@@ -15,9 +16,9 @@ public class Unit : MonoBehaviour {
     [SerializeField]
     private int defense;
     [SerializeField]
-    private int agility;
-    [SerializeField]
     private int movement;
+
+    private bool isDead;
 
     private JobBase job;
     [SerializeField]
@@ -30,10 +31,11 @@ public class Unit : MonoBehaviour {
     public int Health => health;
     public int Attack => attack;
     public int Defense => defense;
-    public int Agility => agility;
     public int Movement => movement;
 
     private void Awake() {
+        isDead = false;
+
         job = GetComponent<JobBase>();
     }
 
@@ -45,18 +47,18 @@ public class Unit : MonoBehaviour {
     public void SetUnitByLevel(int level) {
         this.level = level;
         exp = 0;
-        maxHealth = job.JobObject.BaseHealth + (level - 1) * job.JobObject.IncrementHealth;
+        maxHealth = job.BaseHealth + (level - 1) * job.IncrementHealth;
         health = maxHealth;
-        attack = job.JobObject.BaseAttack + (level - 1) * job.JobObject.IncrementAttack;
-        defense = job.JobObject.BaseDefense + (level - 1) * job.JobObject.IncrementDefense;
-        movement = job.JobObject.Movement;
+        attack = job.BaseAttack + (level - 1) * job.IncrementAttack;
+        defense = job.BaseDefense + (level - 1) * job.IncrementDefense;
+        movement = job.Movement;
     }
 
     public void LevelUp() {
         level++;
-        maxHealth += job.JobObject.IncrementHealth;
-        attack += job.JobObject.IncrementAttack;
-        defense += job.JobObject.IncrementDefense;
+        maxHealth += job.IncrementHealth;
+        attack += job.IncrementAttack;
+        defense += job.IncrementDefense;
     }
 
     public void EarnExp(bool isKill) {
@@ -75,13 +77,40 @@ public class Unit : MonoBehaviour {
     }
 
     public void DealDamage(Unit target) {
-        int damage = attack + weapon.WeaponObject.Damage;
+        int damage = attack + weapon.Damage;
         target.ReceiveDamage(damage);
     }
 
     public void ReceiveDamage(int damage) {
-        int finalDamage = damage - defense;
+        int finalDamage = Mathf.Clamp(damage - defense, 1, damage);
         health = Mathf.Clamp(health - finalDamage, 0, health);
-        // Ser� necess�rio fazer alguma verifica��o de morte?
+
+        if (health == 0 && !isDead) {
+            StartCoroutine(Die());
+        }
+    }
+
+    private IEnumerator Die() {
+        SpriteEffect spriteEffect = GetComponentInChildren<SpriteEffect>();
+
+        isDead = true;
+
+        if (spriteEffect != null) {
+            yield return StartCoroutine(spriteEffect.FadeTo(0.0f, 1.0f));
+            DestroyUnit();
+        } else {
+            Debug.LogError("SpriteEffect component not found in Unit child game object");
+        }
+    }
+
+    private void DestroyUnit() {
+        UnitManager unitManager = FindObjectOfType<UnitManager>();
+        UnitMatch unitMatch = GetComponent<UnitMatch>();
+
+        if (unitManager != null && unitMatch != null) {
+            unitManager.RemoveUnit(this, unitMatch.IsAlly);
+        }
+
+        Destroy(gameObject);
     }
 }
