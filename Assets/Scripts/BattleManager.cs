@@ -50,10 +50,10 @@ public class BattleManager : MonoBehaviour {
         return direction;
     }
 
-    public (List<Vector3Int>, List<Vector3Int>) EnemyInRange(Vector2Int unitPosition, WeaponBase weapon) {
+    public (List<Vector3Int>, List<List<Vector3Int>>) EnemyInRange(Vector2Int unitPosition, WeaponBase weapon) {
 
         List<Vector3Int> rangeBase = new List<Vector3Int>();
-        List<Vector3Int> range = new List<Vector3Int>();
+        List<List<Vector3Int>> range = new List<List<Vector3Int>>();
 
         weapon.GetTilesInRange(unitPosition).ForEach(item => {
             Vector3Int newRangeTile = new Vector3Int(item.x, item.y, 0);
@@ -61,11 +61,9 @@ public class BattleManager : MonoBehaviour {
             List<Vector3Int> newRange = CalcDirection(unitPosition, weapon, direction);
             if (newRange.Count > 0) {
                 rangeBase.Add(newRangeTile);
-                range.AddRange(newRange);
+                range.Add(newRange);
             }
         });
-
-        range.RemoveRange(0, rangeBase.Count);
 
         return (rangeBase, range);
     }
