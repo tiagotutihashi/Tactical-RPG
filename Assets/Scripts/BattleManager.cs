@@ -5,9 +5,11 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour {
 
     private GridManager gridManager;
+    private MatchManager matchManager;
 
     private void Awake() {
         gridManager = FindObjectOfType<GridManager>();
+        matchManager = FindObjectOfType<MatchManager>();
     }
 
     private bool CheckEnemyInRange(List<Vector3Int> range) {
@@ -66,6 +68,28 @@ public class BattleManager : MonoBehaviour {
         });
 
         return (rangeBase, range);
+    }
+
+    public void DealDamageInEnemies(List<Vector3Int> positionToDealDamage, Unit playerUnit){
+
+        List<Unit> enemyToDealDamage = new List<Unit>();
+        for (int i = 0; i < positionToDealDamage.Count; i++)
+        {
+            if(gridManager.EnemyInGrid(positionToDealDamage[i])){
+                CustomGrid customGrid = gridManager.VerifyIfContains(new Vector2(positionToDealDamage[i].x, positionToDealDamage[i].y));
+                if(customGrid){
+                    enemyToDealDamage.Add(customGrid.Unit);
+                }
+            }
+        }
+
+        enemyToDealDamage.ForEach(item => {
+            playerUnit.DealDamage(item);
+        });
+
+        // Todo colocar para remover o unidade selecionada e desaparecer com o modal de ação
+        matchManager.PlayerUnitMadeAction(playerUnit);
+
     }
 
 }

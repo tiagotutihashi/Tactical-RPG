@@ -9,6 +9,7 @@ public class ActionModal : MonoBehaviour {
     private GameObject buttonContainer;
 
     private UnitManager unitManager;
+
     private UnitMoverManager unitMoverManager;
     private MatchManager matchManager;
     private ShowRangeTiles showRangeTiles;

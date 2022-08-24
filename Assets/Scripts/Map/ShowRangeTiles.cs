@@ -40,6 +40,8 @@ public class ShowRangeTiles : MonoBehaviour {
     [SerializeField]
     private SelectableTile selectableTile;
 
+    private List<SelectableTile> activeSelectableTiles = new List<SelectableTile>();
+
     private void Awake() {
 
         SetdataFromTiles();
@@ -197,6 +199,15 @@ public class ShowRangeTiles : MonoBehaviour {
         rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
     }
 
+    public void ResetSelectableRangeTiles() {
+        if (activeSelectableTiles.Count > 0) {
+            foreach (SelectableTile go in activeSelectableTiles) {
+                Destroy(go.gameObject);
+            }
+        }
+        activeSelectableTiles.Clear();
+    }
+
     public void ShowSelectedAttackRange() {
         List<Vector3Int> rangeBase = new List<Vector3Int>();
         List<List<Vector3Int>> range = new List<List<Vector3Int>>();
@@ -206,10 +217,12 @@ public class ShowRangeTiles : MonoBehaviour {
         Vector2Int unitPosition = new Vector2Int(unitMoverManager.FinalPosition.x, unitMoverManager.FinalPosition.y);
         if (unit.Weapon) {
             (rangeBase, range) = battleManager.EnemyInRange(unitPosition, unit.Weapon);
+            ResetSelectableRangeTiles();
             for (int i = 0; i < rangeBase.Count; i++) {
-                SelectableTile newSelectableTile = Instantiate(selectableTile, rangeBase[i], Quaternion.identity);
+                SelectableTile newSelectableTile = Instantiate(selectableTile, rangeBase[i], Quaternion.identity, gameObject.transform);
                 newSelectableTile.SetTilePosition(range[i]);
                 newSelectableTile.SetBaseTile(rangeBase[i]);
+                activeSelectableTiles.Add(newSelectableTile);
             }
         }
 

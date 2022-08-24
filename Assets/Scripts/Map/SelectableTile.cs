@@ -41,7 +41,9 @@ public class SelectableTile : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     }
 
     public void OnPointerClick(PointerEventData pointerEventData) {
-        Debug.Log(name + " Game Object Clicked!");
+        BattleManager battleManager = FindObjectOfType<BattleManager>();
+        UnitMoverManager unitMoverManager = FindObjectOfType<UnitMoverManager>();
+        battleManager.DealDamageInEnemies(tilesPosition, unitMoverManager.UnitSelected);
     }
 
 }
