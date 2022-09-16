@@ -9,6 +9,7 @@ public class MatchManager : MonoBehaviour {
 
     private UnitManager unitManager;
     private ShowRangeTiles showRangeTiles;
+    private UnitMoverManager unitMoverManager;
 
     private ActionModal actionModal;
 
@@ -26,6 +27,7 @@ public class MatchManager : MonoBehaviour {
         unitManager = FindObjectOfType<UnitManager>();
         showRangeTiles = FindObjectOfType<ShowRangeTiles>();
         actionModal = FindObjectOfType<ActionModal>();
+        unitMoverManager = FindObjectOfType<UnitMoverManager>();
     }
 
     public void StartMatch() {
@@ -45,6 +47,7 @@ public class MatchManager : MonoBehaviour {
             unitMatch.SetMoved(true);
             showRangeTiles.ResetSelectableRangeTiles();
             showRangeTiles.ClearAllTiles();
+            unitMoverManager.CleanUnitSelected();
             actionModal.CloseModal();
         }
         if (playerUnitActions >= unitManager.PlayerUnits.Count) {

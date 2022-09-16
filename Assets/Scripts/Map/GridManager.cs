@@ -74,18 +74,18 @@ public class GridManager : MonoBehaviour {
         }
     }
 
-    public bool EnemyInGrid(Vector3Int enemyPosition) {
+    public Unit EnemyInGrid(Vector3Int enemyPosition) {
         foreach (CustomGrid grid in gridList) {
             if (
                 grid.IndexX == enemyPosition.x &&
                 grid.IndexY == enemyPosition.y
             ) {
                 if (unitManager.EnemyUnits.Contains(grid.Unit)) {
-                    return true;
+                    return grid.Unit;
                 }
             }
         }
-        return false;
+        return null;
     }
 
 }

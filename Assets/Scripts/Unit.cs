@@ -20,10 +20,15 @@ public class Unit : MonoBehaviour {
 
     private bool isDead;
 
+    [SerializeField]
     private JobBase job;
     [SerializeField]
     private WeaponBase weapon;
     public WeaponBase Weapon => weapon;
+
+    [SerializeField]
+    private HealthBar healthBar;
+    public HealthBar HealthBar => healthBar;
 
     public int Level => level;
     public int Exp => exp;
@@ -42,6 +47,8 @@ public class Unit : MonoBehaviour {
     private void Start() {
         level = level == 0 ? 1 : level;
         SetUnitByLevel(level);
+        healthBar.SetHealthMaxValue(maxHealth);
+        healthBar.SetHealthValue(health);
     }
 
     public void SetUnitByLevel(int level) {
@@ -76,17 +83,23 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    public void DealDamage(Unit target) {
+    public IEnumerator DealDamage(Unit target) {
         int damage = attack + weapon.Damage;
-        target.ReceiveDamage(damage);
+        yield return StartCoroutine(target.ReceiveDamage(damage));
     }
 
-    public void ReceiveDamage(int damage) {
+    public IEnumerator ReceiveDamage(int damage) {
         int finalDamage = Mathf.Clamp(damage - defense, 1, damage);
         health = Mathf.Clamp(health - finalDamage, 0, health);
 
+        yield return StartCoroutine(HealthAnimation(health));
+    }
+
+    private IEnumerator HealthAnimation(int damage){
+
+        yield return StartCoroutine(healthBar.DecreaseHealthValue(damage));
         if (health == 0 && !isDead) {
-            StartCoroutine(Die());
+            yield return StartCoroutine(Die());
         }
     }
 

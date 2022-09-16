@@ -13,7 +13,7 @@ public class UnitMoverManager : MonoBehaviour {
 
     public Unit UnitSelected => unitSelected;
 
-    private Vector3Int initialPosition;
+    private Vector3Int initialPosition = new Vector3Int(400,400,0);
     public Vector3Int InitialPosition => initialPosition;
 
     private Vector3Int finalPosition;
@@ -92,6 +92,7 @@ public class UnitMoverManager : MonoBehaviour {
 
     public void CleanUnitSelected() {
         unitSelected = null;
+        initialPosition = new Vector3Int(400,400,0);
     }
 
 }

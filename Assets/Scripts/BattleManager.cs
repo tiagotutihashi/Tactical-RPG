@@ -14,7 +14,9 @@ public class BattleManager : MonoBehaviour {
 
     private bool CheckEnemyInRange(List<Vector3Int> range) {
         foreach (Vector3Int grid in range) {
-            if (gridManager.EnemyInGrid(grid)) {
+            Unit enemy = gridManager.EnemyInGrid(grid);
+            if (enemy) {
+                enemy.HealthBar.ShowHealthbar();
                 return true;
             }
         }
@@ -70,7 +72,7 @@ public class BattleManager : MonoBehaviour {
         return (rangeBase, range);
     }
 
-    public void DealDamageInEnemies(List<Vector3Int> positionToDealDamage, Unit playerUnit){
+    public IEnumerator DealDamageInEnemies(List<Vector3Int> positionToDealDamage, Unit playerUnit){
 
         List<Unit> enemyToDealDamage = new List<Unit>();
         for (int i = 0; i < positionToDealDamage.Count; i++)
@@ -83,11 +85,17 @@ public class BattleManager : MonoBehaviour {
             }
         }
 
-        enemyToDealDamage.ForEach(item => {
-            playerUnit.DealDamage(item);
-        });
+        foreach (Unit item in enemyToDealDamage)
+        {
+            yield return StartCoroutine(playerUnit.DealDamage(item));
+        }
 
-        // Todo colocar para remover o unidade selecionada e desaparecer com o modal de ação
+        foreach (Unit item in enemyToDealDamage)
+        {
+            item.HealthBar.HideHealthbar();
+        }
+
+        // TODO colocar para remover o unidade selecionada e desaparecer com o modal de ação
         matchManager.PlayerUnitMadeAction(playerUnit);
 
     }
