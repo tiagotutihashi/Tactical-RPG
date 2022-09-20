@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class ShowRangeTiles : MonoBehaviour {
 
     [SerializeField] Tilemap map;
+    public Tilemap Map => map;
     [SerializeField] Tilemap rangeTileMap;
 
     [SerializeField] TileBase redTile;
@@ -26,6 +27,7 @@ public class ShowRangeTiles : MonoBehaviour {
 
     [SerializeField]
     private Dictionary<TileBase, TileData> dataFromTiles;
+    public Dictionary<TileBase, TileData> DataFromTiles => dataFromTiles;
 
     [SerializeField]
     private List<StoredDataTile> storedDataTiles = new List<StoredDataTile>();

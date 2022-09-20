@@ -40,6 +40,19 @@ public class GridManager : MonoBehaviour {
 
     }
 
+    public CustomGrid GetTileByUnit(Unit unit)
+    {
+        foreach (CustomGrid grid in gridList)
+        {
+            if (grid.Unit == unit)
+            {
+                return grid;
+            }
+        }
+
+        return null;
+    }
+
     void CreateGrid() {
 
         UnitManager unitManager = FindObjectOfType<UnitManager>();
