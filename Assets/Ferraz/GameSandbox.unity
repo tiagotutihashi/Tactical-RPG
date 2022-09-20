@@ -5560,7 +5560,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 188503421759483801, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 188503421759483802, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 188503421759483805, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: weapon
@@ -5613,7 +5617,7 @@ PrefabInstance:
     - target: {fileID: 188503421783282794, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 8699319868170147664, guid: 301a2d12ffb69ba47b7d0af1bc2edd12, type: 3}
+      objectReference: {fileID: 1650862602693357773, guid: 1fccc94d50807ba4cba46f04f1b1c2a7, type: 3}
     - target: {fileID: 188503421783282795, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: jobName
       value: Warrior
@@ -5657,6 +5661,10 @@ PrefabInstance:
     - target: {fileID: 188503421783282795, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: weaponsUsed.Array.data[0]
       value: Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 188503421851589380, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 188503421851589384, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: weapon
@@ -5753,7 +5761,7 @@ PrefabInstance:
     - target: {fileID: 188503422010587143, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 8699319868170147664, guid: 301a2d12ffb69ba47b7d0af1bc2edd12, type: 3}
+      objectReference: {fileID: 1650862602693357773, guid: 1fccc94d50807ba4cba46f04f1b1c2a7, type: 3}
     - target: {fileID: 188503422419231618, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -5805,7 +5813,7 @@ PrefabInstance:
     - target: {fileID: 188503423599395673, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 8699319868170147664, guid: 301a2d12ffb69ba47b7d0af1bc2edd12, type: 3}
+      objectReference: {fileID: 1650862602693357773, guid: 1fccc94d50807ba4cba46f04f1b1c2a7, type: 3}
     - target: {fileID: 188503423599395674, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: jobName
       value: Warrior
@@ -5849,6 +5857,10 @@ PrefabInstance:
     - target: {fileID: 188503423599395674, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: weaponsUsed.Array.data[0]
       value: Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 188503423785985574, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 188503423785985578, guid: 84c659d7386a1e344a01fd5ab6ef2343, type: 3}
       propertyPath: weapon
@@ -6200,6 +6212,10 @@ PrefabInstance:
       propertyPath: map
       value: 
       objectReference: {fileID: 1355947974}
+    - target: {fileID: 8736322600408523932, guid: 332579cbe116ae3418c3e291eb5b098f, type: 3}
+      propertyPath: visionRange
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 332579cbe116ae3418c3e291eb5b098f, type: 3}
 --- !u!1001 &6989547426729931162

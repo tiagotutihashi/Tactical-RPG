@@ -5,8 +5,10 @@ using UnityEngine.Tilemaps;
 
 public class EnemyMoverManager : MonoBehaviour
 {
+    [SerializeField]
+    private int visionRange; // vision range of an enemy that it will use to approach distant targets
+
     private UnitManager unitManager;
-    private UnitMoverManager unitMoverManager;
     private GridManager gridManager;
     private PathManager pathManager;
     private ShowRangeTiles showRangeTiles;
@@ -16,25 +18,11 @@ public class EnemyMoverManager : MonoBehaviour
     private void Start()
     {
         unitManager = FindObjectOfType<UnitManager>();
-        unitMoverManager = FindObjectOfType<UnitMoverManager>();
         gridManager = FindObjectOfType<GridManager>();
         pathManager = FindObjectOfType<PathManager>();
         showRangeTiles = FindObjectOfType<ShowRangeTiles>();
 
         storedDataTiles = new List<StoredDataTile>();
-    }
-
-    float time = 0;
-    private void Update()
-    {
-        time += Time.deltaTime;
-
-        if (time > 3 && time < 4)
-        {
-            Debug.Log("Entered");
-            time = 4;
-            StartCoroutine(MakeEnemiesMove());
-        }
     }
 
     public IEnumerator MakeEnemiesMove()
@@ -66,16 +54,14 @@ public class EnemyMoverManager : MonoBehaviour
     private StoredDataTile ChooseTileToMove(Unit enemy, List<StoredDataTile> moveOptions)
     {
         CandidateTile choosenCandidate = new CandidateTile(moveOptions[0]);
-
         List<CandidateTile> candidateTiles = new List<CandidateTile>();
 
         foreach (StoredDataTile tile in moveOptions)
         {
             CandidateTile candidate = new CandidateTile(tile);
-
             Vector2Int tilePosition = new Vector2Int(tile.position.x, tile.position.y);
-
             CustomGrid thisTile = gridManager.VerifyIfContains(tilePosition);
+            int distanceToInitial = Mathf.Abs(moveOptions[0].position.x - tilePosition.x) + Mathf.Abs(moveOptions[0].position.y - tilePosition.y);
 
             if (tile == moveOptions[0])
             {
@@ -95,30 +81,57 @@ public class EnemyMoverManager : MonoBehaviour
                     CustomGrid attackedTileGrid = gridManager.VerifyIfContains(attackedTile);
                     if (attackedTileGrid != null && attackedTileGrid.Unit.GetComponent<UnitMatch>().IsAlly)
                     {
-                        candidate.SetTarget(Mathf.Abs(attackedTile.x - tilePosition.x) + Mathf.Abs(attackedTile.y - tilePosition.y));
+                        int distanceToTarget = Mathf.Abs(attackedTile.x - tilePosition.x) + Mathf.Abs(attackedTile.y - tilePosition.y);
+
+                        if (distanceToInitial <= enemy.Movement)
+                        {
+                            candidate.SetAttackableTarget(distanceToTarget);
+                        }
+                        else
+                        {
+                            StoredDataTile middleTile = candidate.Tile;
+
+                            while (middleTile.distance > enemy.Movement)
+                            {
+                                middleTile = middleTile.parent;
+                                distanceToTarget++;
+                            }
+
+                            candidate = new CandidateTile(middleTile);
+                            candidate.SetVisibleTarget(distanceToTarget);
+                        }
                     }
                 }
             }
 
-            candidate.SetDistanceToInitial(Mathf.Abs(moveOptions[0].position.x - tilePosition.x) + Mathf.Abs(moveOptions[0].position.y - tilePosition.y));
-
+            candidate.SetDistanceToInitial(distanceToInitial);
             candidateTiles.Add(candidate);
         }
 
-        var temp = candidateTiles.FindAll(x => x.HasTarget);
-
-        foreach (CandidateTile candidate in candidateTiles)
+        List<CandidateTile> attackableTargets = candidateTiles.FindAll(x => x.HasAttackableTarget);
+        if (attackableTargets.Count > 0)
         {
-            if (candidate.HasTarget)
+            choosenCandidate = attackableTargets[0];
+            foreach (CandidateTile attackableTarget in attackableTargets)
             {
-                if (candidate.DistanceToTarget > choosenCandidate.DistanceToTarget)
+                if (attackableTarget.DistanceToAttackableTarget > choosenCandidate.DistanceToAttackableTarget)
                 {
-                    choosenCandidate = candidate;
+                    choosenCandidate = attackableTarget;
                 }
-                else if (candidate.DistanceToTarget == choosenCandidate.DistanceToTarget
-                    && candidate.DistanceToInitial < choosenCandidate.DistanceToInitial)
+            }
+        }
+        else
+        {
+            List<CandidateTile> visibleTargets = candidateTiles.FindAll(x => x.HasVisibleTarget);
+            if (visibleTargets.Count > 0)
+            {
+                choosenCandidate = visibleTargets[0];
+                foreach (CandidateTile visibleTarget in visibleTargets)
                 {
-                    choosenCandidate = candidate;
+                    if (visibleTarget.DistanceToVisibleTarget > choosenCandidate.DistanceToVisibleTarget)
+                    {
+                        choosenCandidate = visibleTarget;
+                    }
                 }
             }
         }
@@ -146,18 +159,18 @@ public class EnemyMoverManager : MonoBehaviour
         initialStoredDataTile.distance = 0;
         initialStoredDataTile.visited = true;
         initialStoredDataTile.landSpeed = 0;
-        initialStoredDataTile.remainMovement = enemy.Movement;
+        initialStoredDataTile.remainMovement = enemy.Movement + visionRange;
         storedDataTiles.Add(initialStoredDataTile);
 
         CreateEnemyRhombus(enemy, enemyPosition);
 
-        return pathManager.CalcMovement(enemyPosition, storedDataTiles, enemy.Movement);
+        return pathManager.CalcMovement(enemyPosition, storedDataTiles, enemy.Movement + visionRange);
     }
 
     // Create the "Rhombus"
     private void CreateEnemyRhombus(Unit enemy, Vector3Int enemyPosition)
     {
-        int amount = enemy.Movement;
+        int amount = enemy.Movement + visionRange;
 
         for (int x = -amount; x <= amount; x++)
         {

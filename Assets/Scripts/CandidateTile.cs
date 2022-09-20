@@ -3,29 +3,39 @@ using UnityEngine;
 public class CandidateTile
 {
     private StoredDataTile tile;
-    private bool hasTarget;
-    private int distanceToTarget;
+    private bool hasAttackableTarget;
+    private int distanceToAttackableTarget;
+    private bool hasVisibleTarget;
+    private int distanceToVisibleTarget;
     private bool isInitial;
     private int distanceToInitial;
 
     public StoredDataTile Tile => tile;
-    public bool HasTarget => hasTarget;
-    public int DistanceToTarget => distanceToTarget;
+    public bool HasAttackableTarget => hasAttackableTarget;
+    public int DistanceToAttackableTarget => distanceToAttackableTarget;
+    public bool HasVisibleTarget => hasVisibleTarget;
+    public int DistanceToVisibleTarget => distanceToVisibleTarget;
     public bool IsInitial => isInitial;
     public int DistanceToInitial => distanceToInitial;
 
     public CandidateTile(StoredDataTile tile)
     {
         this.tile = tile;
-        hasTarget = false;
-        distanceToTarget = 0;
+        hasAttackableTarget = false;
+        distanceToAttackableTarget = 0;
         isInitial = false;
     }
 
-    public void SetTarget(int distanceToTarget)
+    public void SetAttackableTarget(int distanceToTarget)
     {
-        hasTarget = true;
-        this.distanceToTarget = distanceToTarget;
+        hasAttackableTarget = true;
+        distanceToAttackableTarget = distanceToTarget;
+    }
+
+    public void SetVisibleTarget(int distanceToTarget)
+    {
+        hasVisibleTarget = true;
+        distanceToVisibleTarget = distanceToTarget;
     }
 
     public void SetInitial()
