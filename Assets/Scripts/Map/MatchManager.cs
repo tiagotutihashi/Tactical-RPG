@@ -8,6 +8,10 @@ public enum TurnState { START, PLAYERTURN, ENEMYTURN, WON, LOST, FLED }
 public class MatchManager : MonoBehaviour {
 
     private UnitManager unitManager;
+    private ShowRangeTiles showRangeTiles;
+    private UnitMoverManager unitMoverManager;
+
+    private ActionModal actionModal;
 
     [SerializeField]
     private TurnState currentTurnState;
@@ -21,6 +25,9 @@ public class MatchManager : MonoBehaviour {
 
     private void Start() {
         unitManager = FindObjectOfType<UnitManager>();
+        showRangeTiles = FindObjectOfType<ShowRangeTiles>();
+        actionModal = FindObjectOfType<ActionModal>();
+        unitMoverManager = FindObjectOfType<UnitMoverManager>();
     }
 
     public void StartMatch() {
@@ -38,6 +45,10 @@ public class MatchManager : MonoBehaviour {
         playerUnitActions += 1;
         if (unit.TryGetComponent<UnitMatch>(out UnitMatch unitMatch)) {
             unitMatch.SetMoved(true);
+            showRangeTiles.ResetSelectableRangeTiles();
+            showRangeTiles.ClearAllTiles();
+            unitMoverManager.CleanUnitSelected();
+            actionModal.CloseModal();
         }
         if (playerUnitActions >= unitManager.PlayerUnits.Count) {
             StartEnemyTurn();

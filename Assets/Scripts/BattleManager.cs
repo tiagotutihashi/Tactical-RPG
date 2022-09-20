@@ -5,14 +5,18 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour {
 
     private GridManager gridManager;
+    private MatchManager matchManager;
 
     private void Awake() {
         gridManager = FindObjectOfType<GridManager>();
+        matchManager = FindObjectOfType<MatchManager>();
     }
 
     private bool CheckEnemyInRange(List<Vector3Int> range) {
         foreach (Vector3Int grid in range) {
-            if (gridManager.EnemyInGrid(grid)) {
+            Unit enemy = gridManager.EnemyInGrid(grid);
+            if (enemy) {
+                enemy.HealthBar.ShowHealthbar();
                 return true;
             }
         }
@@ -50,10 +54,10 @@ public class BattleManager : MonoBehaviour {
         return direction;
     }
 
-    public (List<Vector3Int>, List<Vector3Int>) EnemyInRange(Vector2Int unitPosition, WeaponBase weapon) {
+    public (List<Vector3Int>, List<List<Vector3Int>>) EnemyInRange(Vector2Int unitPosition, WeaponBase weapon) {
 
         List<Vector3Int> rangeBase = new List<Vector3Int>();
-        List<Vector3Int> range = new List<Vector3Int>();
+        List<List<Vector3Int>> range = new List<List<Vector3Int>>();
 
         weapon.GetTilesInRange(unitPosition).ForEach(item => {
             Vector3Int newRangeTile = new Vector3Int(item.x, item.y, 0);
@@ -61,13 +65,39 @@ public class BattleManager : MonoBehaviour {
             List<Vector3Int> newRange = CalcDirection(unitPosition, weapon, direction);
             if (newRange.Count > 0) {
                 rangeBase.Add(newRangeTile);
-                range.AddRange(newRange);
+                range.Add(newRange);
             }
         });
 
-        range.RemoveRange(0, rangeBase.Count);
-
         return (rangeBase, range);
+    }
+
+    public IEnumerator DealDamageInEnemies(List<Vector3Int> positionToDealDamage, Unit playerUnit){
+
+        List<Unit> enemyToDealDamage = new List<Unit>();
+        for (int i = 0; i < positionToDealDamage.Count; i++)
+        {
+            if(gridManager.EnemyInGrid(positionToDealDamage[i])){
+                CustomGrid customGrid = gridManager.VerifyIfContains(new Vector2(positionToDealDamage[i].x, positionToDealDamage[i].y));
+                if(customGrid){
+                    enemyToDealDamage.Add(customGrid.Unit);
+                }
+            }
+        }
+
+        foreach (Unit item in enemyToDealDamage)
+        {
+            yield return StartCoroutine(playerUnit.DealDamage(item));
+        }
+
+        foreach (Unit item in enemyToDealDamage)
+        {
+            item.HealthBar.HideHealthbar();
+        }
+
+        // TODO colocar para remover o unidade selecionada e desaparecer com o modal de ação
+        matchManager.PlayerUnitMadeAction(playerUnit);
+
     }
 
 }

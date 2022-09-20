@@ -39,6 +39,11 @@ public class ShowRangeTiles : MonoBehaviour {
     [SerializeField]
     private TileBase selectedTile;
 
+    [SerializeField]
+    private SelectableTile selectableTile;
+
+    private List<SelectableTile> activeSelectableTiles = new List<SelectableTile>();
+
     private void Awake() {
 
         SetdataFromTiles();
@@ -196,39 +201,56 @@ public class ShowRangeTiles : MonoBehaviour {
         rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
     }
 
-    public void ShowAttackRange(Unit unit) {
-
-        if (unit.Weapon) {
-            Vector2Int unitPosition = new Vector2Int(unitMoverManager.FinalPosition.x, unitMoverManager.FinalPosition.y);
-            Debug.Log(unit.Weapon.GetTilesInRange(unitPosition));
+    public void ResetSelectableRangeTiles() {
+        if (activeSelectableTiles.Count > 0) {
+            foreach (SelectableTile go in activeSelectableTiles) {
+                Destroy(go.gameObject);
+            }
         }
-
+        activeSelectableTiles.Clear();
     }
 
     public void ShowSelectedAttackRange() {
         List<Vector3Int> rangeBase = new List<Vector3Int>();
-        List<Vector3Int> range = new List<Vector3Int>();
+        List<List<Vector3Int>> range = new List<List<Vector3Int>>();
 
         Unit unit = unitMoverManager.UnitSelected;
 
         Vector2Int unitPosition = new Vector2Int(unitMoverManager.FinalPosition.x, unitMoverManager.FinalPosition.y);
         if (unit.Weapon) {
             (rangeBase, range) = battleManager.EnemyInRange(unitPosition, unit.Weapon);
-        }
-
-        TileBase[] rangeTiles = new TileBase[range.Count + rangeBase.Count];
-        for (int i = 0; i < rangeTiles.Length; i++) {
-            if (i < range.Count) {
-                rangeTiles[i] = greenTile;
-            } else {
-                rangeTiles[i] = selectTile;
+            ResetSelectableRangeTiles();
+            for (int i = 0; i < rangeBase.Count; i++) {
+                SelectableTile newSelectableTile = Instantiate(selectableTile, rangeBase[i], Quaternion.identity, gameObject.transform);
+                newSelectableTile.SetTilePosition(range[i]);
+                newSelectableTile.SetBaseTile(rangeBase[i]);
+                activeSelectableTiles.Add(newSelectableTile);
             }
         }
 
-        // Set the tiles that the unit can make action
-        range.AddRange(rangeBase);
-        rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
+        TileBase[] rangeTiles = new TileBase[rangeBase.Count];
+        for (int i = 0; i < rangeTiles.Length; i++) {
+            rangeTiles[i] = selectTile;
+        }
 
+        rangeTileMap.SetTiles(rangeBase.ToArray(), rangeTiles);
+
+    }
+
+    public void ShowAttackSelectableTile(List<Vector3Int> range) {
+        TileBase[] rangeTiles = new TileBase[range.Count];
+        for (int i = 0; i < rangeTiles.Length; i++) {
+            rangeTiles[i] = greenTile;
+        }
+        rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
+    }
+
+    public void RemoveAttackSelectableTile(List<Vector3Int> range) {
+        TileBase[] rangeTiles = new TileBase[range.Count];
+        for (int i = 0; i < rangeTiles.Length; i++) {
+            rangeTiles[i] = null;
+        }
+        rangeTileMap.SetTiles(range.ToArray(), rangeTiles);
     }
 
 }
