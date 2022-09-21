@@ -101,4 +101,22 @@ public class GridManager : MonoBehaviour {
         return null;
     }
 
+    public Unit PlayerInGrid(Vector3Int playerPosition)
+    {
+        foreach (CustomGrid grid in gridList)
+        {
+            if (
+                grid.IndexX == playerPosition.x &&
+                grid.IndexY == playerPosition.y
+            )
+            {
+                if (unitManager.PlayerUnits.Contains(grid.Unit))
+                {
+                    return grid.Unit;
+                }
+            }
+        }
+        return null;
+    }
+
 }

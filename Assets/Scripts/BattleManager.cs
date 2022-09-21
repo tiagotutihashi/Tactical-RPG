@@ -72,32 +72,37 @@ public class BattleManager : MonoBehaviour {
         return (rangeBase, range);
     }
 
-    public IEnumerator DealDamageInEnemies(List<Vector3Int> positionToDealDamage, Unit playerUnit){
-
-        List<Unit> enemyToDealDamage = new List<Unit>();
+    public IEnumerator DealDamageInEnemies(List<Vector3Int> positionToDealDamage, Unit attackingUnit)
+    {
+        List<Unit> targetsToDealDamage = new List<Unit>();
         for (int i = 0; i < positionToDealDamage.Count; i++)
         {
-            if(gridManager.EnemyInGrid(positionToDealDamage[i])){
+            if ((attackingUnit.GetComponent<UnitMatch>().IsAlly && gridManager.EnemyInGrid(positionToDealDamage[i]))
+                || (!attackingUnit.GetComponent<UnitMatch>().IsAlly && gridManager.PlayerInGrid(positionToDealDamage[i])))
+            {
                 CustomGrid customGrid = gridManager.VerifyIfContains(new Vector2(positionToDealDamage[i].x, positionToDealDamage[i].y));
-                if(customGrid){
-                    enemyToDealDamage.Add(customGrid.Unit);
+                if (customGrid)
+                {
+                    targetsToDealDamage.Add(customGrid.Unit);
                 }
             }
         }
 
-        foreach (Unit item in enemyToDealDamage)
+        foreach (Unit target in targetsToDealDamage)
         {
-            yield return StartCoroutine(playerUnit.DealDamage(item));
+            yield return StartCoroutine(attackingUnit.DealDamage(target));
         }
 
-        foreach (Unit item in enemyToDealDamage)
+        foreach (Unit target in targetsToDealDamage)
         {
-            item.HealthBar.HideHealthbar();
+            target.HealthBar.HideHealthbar();
         }
 
         // TODO colocar para remover o unidade selecionada e desaparecer com o modal de ação
-        matchManager.PlayerUnitMadeAction(playerUnit);
-
+        if (attackingUnit.GetComponent<UnitMatch>().IsAlly)
+        {
+            matchManager.PlayerUnitMadeAction(attackingUnit);
+        }
     }
 
 }

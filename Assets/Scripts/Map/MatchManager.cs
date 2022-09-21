@@ -10,6 +10,7 @@ public class MatchManager : MonoBehaviour {
     private UnitManager unitManager;
     private ShowRangeTiles showRangeTiles;
     private UnitMoverManager unitMoverManager;
+    private EnemyMoverManager enemyMoverManager;
 
     private ActionModal actionModal;
 
@@ -28,6 +29,7 @@ public class MatchManager : MonoBehaviour {
         showRangeTiles = FindObjectOfType<ShowRangeTiles>();
         actionModal = FindObjectOfType<ActionModal>();
         unitMoverManager = FindObjectOfType<UnitMoverManager>();
+        enemyMoverManager = FindObjectOfType<EnemyMoverManager>();
     }
 
     public void StartMatch() {
@@ -56,15 +58,17 @@ public class MatchManager : MonoBehaviour {
     }
 
     public void StartEnemyTurn() {
-        turnText.text = "Inimigo Turno";
-        enemyUnitActions = 0;
+        turnText.text = "Turno Inimigo";
+        StartCoroutine(enemyMoverManager.MakeEnemiesMove());
+        StartPlayerTurn();
+        //enemyUnitActions = 0;
     }
 
-    public void EnemyUnitMadeAction() {
-        enemyUnitActions += 1;
-        if (enemyUnitActions >= unitManager.EnemyUnits.Count) {
-            StartPlayerTurn();
-        }
-    }
+    //public void EnemyUnitMadeAction() {
+    //    enemyUnitActions += 1;
+    //    if (enemyUnitActions >= unitManager.EnemyUnits.Count) {
+    //        StartPlayerTurn();
+    //    }
+    //}
 
 }
